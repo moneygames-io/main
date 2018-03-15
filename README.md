@@ -36,10 +36,11 @@ The last *snake* remaining after all *snakes* have been eliminated earns the ent
 Game opperations that need to be conducted "every frame":
 
 For all heads:
-	0. Is head intersecting a tail? Dead
-	1. Delete the tail 
-	2. Add a head in next location 
-	3. Is head intersecting a tail? Dead
+
+0. Is head intersecting a tail? Dead
+1. Delete the tail 
+2. Add a head in next location 
+3. Is head intersecting a tail? Dead
 
 Should be O(n) where n is number of heads.
 
