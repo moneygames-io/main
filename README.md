@@ -2,13 +2,13 @@
 
 Sneks is going to be a really simple game moddeled after [slither.io](slither.io), except we're going to conduct bouts [battle royale style](https://en.wikipedia.org/wiki/Battle_royale_game), and allow people to use [crypto currencies](https://en.wikipedia.org/wiki/Cryptocurrency) to gamble on the outcomes of games.
 
-Additionally other game modes may be added in the future for different playstyles. A game mode that encourages the collection of map resources and "escaping" to cash out might be fun as well. The playstyle differences will largely be a fast paced "winner take all" vs. a more slow and rewarding "grind" to try to grind more effectively than other players on the map.
+Additionally other game modes may be added in the future for different playstyles. A game mode that encourages the collection of map resources and "escaping" to cash out might be fun as well. The playstyle differences will largely be a fast paced "winner take all" vs. a slower and more rewarding "grind" to try to grind more effectively than other players on the map.
 
 ## Game Mechanics Overview
 
 ### Matchmaking and Buy In
 	
-Players deposit a small amount of money into a specified wallet (different for each player). Upon receiving funds for the wallet they will enter the matchmaking queue. At any point prior to the game starting they may cancel for a penalty. After a fixed amount of time (based on # of active players) the game will begin. If more money is entered into their designated wallet, only the minimum buy in will be debitted, the remaining will be refunded to sender's address.
+Players deposit a small amount of money into a specified wallet (different for each player). Upon receiving funds for the wallet they will enter the matchmaking queue. At any point prior to the game starting they may cancel for a penalty. After a fixed amount of time (based on # of active players), the game will begin. If more money is entered into their designated wallet, only the minimum buy in will be debitted, the remaining will be refunded to sender's address.
 
 ### What are we doing with the buy in?
 
@@ -22,9 +22,9 @@ If a *head* of a *snake* colides with a *wall*, or with the *tail* of another *s
 
 As the number of snakes, and the food available decreases, the map will shrink to keep game play lively.
 
-*Snakes* can *sprint* in order to try to other *snakes* off. They do this at the expense of *length* which is converted to *food* behind their *tail*.
+*Snakes* can *sprint* in order to try to cut other *snakes* off. They do this at the expense of *length* which is converted to *food* behind their *tail*.
 
-The last *snake* remaining after all *snakes* have been eliminated earns the entire prise pool (90% of everyone's buyin). 
+The last *snake* remaining after all *snakes* have been eliminated earns the entire prize pool (90% of everyone's buyin).
 
 ### Misc rules for interesting gameplay
 
