@@ -1,7 +1,7 @@
 package main
 
 type Tile struct {
-	Snake Snake*
+	Snake *Snake
 	Depth int
 }
 
