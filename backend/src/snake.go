@@ -16,7 +16,7 @@ type SnakeNode struct {
 	Prev *SnakeNode
 }
 
-func (snake *Snake) NewSnake(x int, y int, world *Map) *Snake {
+func NewSnake(x int, y int, world *Map) *Snake {
 	s := new(Snake)
 	s.Head = &SnakeNode{s, x, y, nil, nil}
 	s.Tail = s.Head
