@@ -8,14 +8,6 @@ type Snake struct {
 	Map    *Map
 }
 
-type SnakeNode struct {
-	Snake *Snake
-	X     int
-	Y     int
-	Next  *SnakeNode
-	Prev  *SnakeNode
-}
-
 func NewSnake(x int, y int, world *Map) *Snake {
 	s := new(Snake)
 	s.Head = &SnakeNode{s, x, y, nil, nil}
