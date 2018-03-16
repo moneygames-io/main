@@ -3,17 +3,17 @@ package main
 type Snake struct {
 	Player string
 	Length int
-	Head *SnakeNode
-	Tail *SnakeNode
-	Map *Map
+	Head   *SnakeNode
+	Tail   *SnakeNode
+	Map    *Map
 }
 
 type SnakeNode struct {
 	Snake *Snake
-	X int
-	Y int
-	Next *SnakeNode
-	Prev *SnakeNode
+	X     int
+	Y     int
+	Next  *SnakeNode
+	Prev  *SnakeNode
 }
 
 func NewSnake(x int, y int, world *Map) *Snake {
