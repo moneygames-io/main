@@ -1,3 +1,5 @@
+package main
+
 type Snake struct {
 	Player string
 	Length int

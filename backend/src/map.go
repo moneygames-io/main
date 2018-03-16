@@ -1,3 +1,5 @@
+package main
+
 type Tile struct {
 	Snake Snake*
 	Depth int
