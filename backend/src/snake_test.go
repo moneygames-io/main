@@ -2,14 +2,11 @@ package main
 
 import (
 	"testing"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewSnake(t *testing.T) {
 	testSnake := NewSnake(0, 0, nil)
-	if testSnake.Length != 1 {
-		t.Error("expected", 1, "got", testSnake.Length)
-	}
-	if testSnake.Map != nil {
-		t.Error("expected", nil, "got", testSnake.Map)
-	}
+	assert.Equal(t, testSnake.Length, 1, "new snake length should be 1")
+	assert.Equal(t, testSnake.CurrentDirection, 0, "default current direction should be 0")
 }

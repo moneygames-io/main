@@ -1,5 +1,9 @@
 package main
 
+import (
+	"math"
+)
+
 type Snake struct {
 	Player string
 	Length int
@@ -14,6 +18,7 @@ func NewSnake(x int, y int, events MapEvent) *Snake {
 	s.Head = &SnakeNode{s, x, y, nil, nil}
 	s.Tail = s.Head
 	s.Length = 1
+	s.CurrentDirection = 0
 	s.Events = events
 
 	s.Events.AddSnakeNode(s.Head)
@@ -21,7 +26,7 @@ func NewSnake(x int, y int, events MapEvent) *Snake {
 }
 
 func (snake *Snake) Move(direction int) {
-	if math.Abs(direction-snake.CurrentDirection) != 2 {
+	if math.Abs(float64(direction-snake.CurrentDirection)) != 2 {
 		snake.CurrentDirection = direction
 	}
 	snake.Grow()
@@ -29,17 +34,17 @@ func (snake *Snake) Move(direction int) {
 }
 
 func (snake *Snake) Sprint(direction int) {
-	if math.Abs(direction-snake.CurrentDirection) != 2 {
+	if math.Abs(float64(direction-snake.CurrentDirection)) != 2 {
 		snake.CurrentDirection = direction
 	}
-	snake.grow()
+	snake.Grow()
 	oldTail := snake.Shorten(2)
-	snake.Events.AddFood(Food(oldTail.X, oldTail.Y))
+	snake.Events.AddFood(&Food{oldTail.X, oldTail.Y})
 }
 
 func (snake *Snake) Grow() {
 	oldHead := snake.Head
-	dx, dy = directionToDxDy(snake.CurrentDirection)
+	dx, dy := directionToDxDy(snake.CurrentDirection)
 
 	newHead := new(SnakeNode)
 	newHead.Snake = oldHead.Snake
@@ -56,7 +61,7 @@ func (snake *Snake) Grow() {
 	snake.Events.AddSnakeNode(newHead)
 }
 
-func (snake *Snake) Shorten(howMuch int) SnakeNode* {
+func (snake *Snake) Shorten(howMuch int) *SnakeNode {
 	oldTail := snake.Tail
 	newTail := snake.Tail.Prev
 

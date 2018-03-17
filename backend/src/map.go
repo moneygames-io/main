@@ -10,10 +10,10 @@ type Map struct {
 }
 
 type MapEvent interface {
-	AddSnakeNode(snakeNode SnakeNode*)
-	RemoveSnakeNode(snakeNode SnakeNode*)
-	AddFood(food Food*)
-	RemoveFood(food Food*)
+	AddSnakeNode(*SnakeNode)
+	RemoveSnakeNode(*SnakeNode)
+	AddFood(*Food)
+	RemoveFood(*Food)
 }
 
 func (m *Map) NewMap(width int, height int) *Map {
@@ -22,18 +22,18 @@ func (m *Map) NewMap(width int, height int) *Map {
 	return newMap
 }
 
-func (m *Map) AddSnakeNode(snake SnakeNode*) {
+func (m *Map) AddSnakeNode(snake *SnakeNode) {
 
 }
 
-func (m *Map) RemoveSnakeNode(snake SnakeNode*) {
+func (m *Map) RemoveSnakeNode(snake *SnakeNode) {
 
 }
 
-func (m *Map) AddFood(x int, y int) {
+func (m *Map) AddFood(*Food) {
 
 }
 
-func (m *Map) RemoveFood(player string) {
+func (m *Map) RemoveFood(*Food) {
 
 }
