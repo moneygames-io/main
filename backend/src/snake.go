@@ -35,7 +35,7 @@ func (snake *Snake) Move(direction int) {
 	case 0: // Empty Cell
 		snake.ShortenTail(1)
 		break
-	case 1: // Food
+	case 1: // Food TODO Remove?
 		break
 	case 2:
 		snake.ShortenTail(1)
