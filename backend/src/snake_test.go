@@ -11,6 +11,7 @@ type DummyMap struct {
 	RemoveSN       int
 	AddF           int
 	RemoveF        int
+	SnakesR        int
 	IntendedReturn int
 }
 
@@ -33,6 +34,10 @@ func (dm *DummyMap) AddFood(sn *Food) {
 
 func (dm *DummyMap) RemoveFood(sn *Food) {
 	dm.RemoveF++
+}
+
+func (dm *DummyMap) SnakeRemoved(sn *Snake) {
+	dm.SnakesR++
 }
 
 func TestNewSnake(t *testing.T) {
@@ -138,7 +143,7 @@ func TestSnakeMoving5(t *testing.T) {
 	assert.Equal(t, 0, testSnake.Head.Y)
 }
 
-func TestSnakeMoving6(t *testing.T) {
+func TestSnakeDead(t *testing.T) {
 	dummyMap := &DummyMap{IntendedReturn: 1}
 	testSnake := NewSnake(0, 0, dummyMap)
 
