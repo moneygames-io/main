@@ -5,12 +5,12 @@ import (
 )
 
 type Snake struct {
-	Player string
-	Length int
+	Player           string
+	Length           int
 	CurrentDirection int
-	Head   *SnakeNode
-	Tail   *SnakeNode
-	Events MapEvent
+	Head             *SnakeNode
+	Tail             *SnakeNode
+	Events           MapEvent
 }
 
 func NewSnake(x int, y int, events MapEvent) *Snake {
@@ -32,13 +32,13 @@ func (snake *Snake) Move(direction int) {
 	status := snake.GrowHead()
 
 	switch status {
-		case 0: // Empty Cell
-			snake.ShortenTail(1)
-			break
-		case 1: // Food
-			break
-		case 2:
-			snake.Dead()
+	case 0: // Empty Cell
+		snake.ShortenTail(1)
+		break
+	case 1: // Food
+		break
+	case 2:
+		snake.Dead()
 	}
 }
 
@@ -50,14 +50,14 @@ func (snake *Snake) Sprint(direction int) {
 	status := snake.GrowHead()
 
 	switch status {
-		case 0:
-			oldTail := snake.ShortenTail(2)
-			snake.Events.AddFood(&Food{oldTail.X, oldTail.Y})
-		case 1:
-			oldTail := snake.ShortenTail(1)
-			snake.Events.AddFood(&Food{oldTail.X, oldTail.Y})
-		case 2:
-			snake.Dead()
+	case 0:
+		oldTail := snake.ShortenTail(2)
+		snake.Events.AddFood(&Food{oldTail.X, oldTail.Y})
+	case 1:
+		oldTail := snake.ShortenTail(1)
+		snake.Events.AddFood(&Food{oldTail.X, oldTail.Y})
+	case 2:
+		snake.Dead()
 	}
 
 }
@@ -76,7 +76,7 @@ func (snake *Snake) GrowHead() int {
 	oldHead.Prev = newHead
 
 	snake.Head = newHead
-	snake.Length = snake.Length+1
+	snake.Length = snake.Length + 1
 
 	return snake.Events.HeadMoved(snake)
 }
@@ -111,15 +111,15 @@ func (snake *Snake) Dead() {
 
 func directionToDxDy(direction int) (int, int) {
 	switch direction {
-		case 0:
-			return 0, 1
-		case 1:
-			return 1, 0
-		case 2:
-			return 0, -1
-		case 3:
-			return -1, 0
-		default:
-			return 0, 0
+	case 0:
+		return 0, 1
+	case 1:
+		return 1, 0
+	case 2:
+		return 0, -1
+	case 3:
+		return -1, 0
+	default:
+		return 0, 0
 	}
 }

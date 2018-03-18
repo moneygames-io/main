@@ -1,6 +1,6 @@
 package main
 
 type Food struct {
-	X     int
-	Y     int
+	X int
+	Y int
 }
