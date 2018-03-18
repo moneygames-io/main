@@ -38,6 +38,7 @@ func (snake *Snake) Move(direction int) {
 	case 1: // Food
 		break
 	case 2:
+		snake.ShortenTail(1)
 		snake.Dead()
 	}
 }
@@ -82,10 +83,12 @@ func (snake *Snake) GrowHead() int {
 }
 
 func (snake *Snake) ShortenTail(howMuch int) *SnakeNode {
+	if snake.Length == 1 { // no tail left
+		return nil
+	}
 	oldTail := snake.Tail
 	newTail := snake.Tail.Prev
 
-	oldTail.Prev = nil
 	newTail.Next = nil
 
 	snake.Tail = newTail
@@ -93,7 +96,7 @@ func (snake *Snake) ShortenTail(howMuch int) *SnakeNode {
 
 	snake.Events.RemoveTailNode(oldTail)
 
-	if howMuch > 1 {
+	if howMuch > 1 { // more tail to get rid off
 		return snake.ShortenTail(howMuch - 1)
 	} else {
 		return oldTail
@@ -102,10 +105,16 @@ func (snake *Snake) ShortenTail(howMuch int) *SnakeNode {
 
 func (snake *Snake) Dead() {
 	sn := snake.ShortenTail(1)
-	snake.Events.AddFood(&Food{sn.X, sn.Y})
-
-	if snake.Length > 0 {
+	if sn != nil {
+		snake.Events.AddFood(&Food{sn.X, sn.Y})
 		snake.Dead()
+	} else {
+		snake.Length = 0
+		snake.Events.RemoveTailNode(snake.Head)
+		snake.Events.SnakeRemoved(snake)
+		snake.Events.AddFood(&Food{snake.Head.X, snake.Head.Y})
+		snake.Tail = nil
+		snake.Head = nil
 	}
 }
 
