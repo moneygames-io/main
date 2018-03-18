@@ -21,7 +21,7 @@ func NewSnake(x int, y int, events MapEvent) *Snake {
 	s.CurrentDirection = 0
 	s.Events = events
 
-	s.Events.AddSnakeNode(s.Head)
+	s.Events.SnakeCreated(s)
 	return s
 }
 
@@ -29,20 +29,40 @@ func (snake *Snake) Move(direction int) {
 	if math.Abs(float64(direction-snake.CurrentDirection)) != 2 {
 		snake.CurrentDirection = direction
 	}
-	snake.Grow()
-	snake.Shorten(1)
+	status := snake.GrowHead()
+
+	switch status {
+		case 0: // Empty Cell
+			snake.ShortenTail(1)
+			break
+		case 1: // Food
+			break
+		case 2:
+			snake.Dead()
+	}
 }
 
 func (snake *Snake) Sprint(direction int) {
 	if math.Abs(float64(direction-snake.CurrentDirection)) != 2 {
 		snake.CurrentDirection = direction
 	}
-	snake.Grow()
-	oldTail := snake.Shorten(2)
-	snake.Events.AddFood(&Food{oldTail.X, oldTail.Y})
+
+	status := snake.GrowHead()
+
+	switch status {
+		case 0:
+			oldTail := snake.ShortenTail(2)
+			snake.Events.AddFood(&Food{oldTail.X, oldTail.Y})
+		case 1:
+			oldTail := snake.ShortenTail(1)
+			snake.Events.AddFood(&Food{oldTail.X, oldTail.Y})
+		case 2:
+			snake.Dead()
+	}
+
 }
 
-func (snake *Snake) Grow() {
+func (snake *Snake) GrowHead() int {
 	oldHead := snake.Head
 	dx, dy := directionToDxDy(snake.CurrentDirection)
 
@@ -58,10 +78,10 @@ func (snake *Snake) Grow() {
 	snake.Head = newHead
 	snake.Length = snake.Length+1
 
-	snake.Events.AddSnakeNode(newHead)
+	return snake.Events.HeadMoved(snake)
 }
 
-func (snake *Snake) Shorten(howMuch int) *SnakeNode {
+func (snake *Snake) ShortenTail(howMuch int) *SnakeNode {
 	oldTail := snake.Tail
 	newTail := snake.Tail.Prev
 
@@ -71,12 +91,21 @@ func (snake *Snake) Shorten(howMuch int) *SnakeNode {
 	snake.Tail = newTail
 	snake.Length = snake.Length - 1
 
-	snake.Events.RemoveSnakeNode(oldTail)
+	snake.Events.RemoveTailNode(oldTail)
 
 	if howMuch > 1 {
-		return snake.Shorten(howMuch - 1)
+		return snake.ShortenTail(howMuch - 1)
 	} else {
 		return oldTail
+	}
+}
+
+func (snake *Snake) Dead() {
+	sn := snake.ShortenTail(1)
+	snake.Events.AddFood(&Food{sn.X, sn.Y})
+
+	if snake.Length > 0 {
+		snake.Dead()
 	}
 }
 

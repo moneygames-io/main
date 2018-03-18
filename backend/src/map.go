@@ -10,15 +10,16 @@ type Map struct {
 }
 
 type MapEvent interface {
-	AddSnakeNode(*SnakeNode)
-	RemoveSnakeNode(*SnakeNode)
+	SnakeCreated(*Snake)
+	HeadMoved(*Snake) int
+	RemoveTailNode(*SnakeNode)
 	AddFood(*Food)
 	RemoveFood(*Food)
 }
 
 func (m *Map) NewMap(width int, height int) *Map {
 	newMap := new(Map)
-	//TODO
+	// TODO
 	return newMap
 }
 
