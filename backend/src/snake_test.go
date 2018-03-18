@@ -162,5 +162,82 @@ func TestSnakeDead(t *testing.T) {
 	testSnake.Move(0)
 
 	assert.Equal(t, 5, dummyMap.AddF)
+}
 
+func TestPositions(t *testing.T) {
+	dummyMap := &DummyMap{IntendedReturn: 1}
+	testSnake := NewSnake(0, 0, dummyMap)
+
+	assert.Equal(t, 0, testSnake.Head.X)
+	assert.Equal(t, 0, testSnake.Head.Y)
+
+	testSnake.Move(0)
+
+	assert.Equal(t, 0, testSnake.Head.X)
+	assert.Equal(t, 1, testSnake.Head.Y)
+
+	assert.Equal(t, 0, testSnake.Head.Next.X)
+	assert.Equal(t, 0, testSnake.Head.Next.Y)
+
+	testSnake.Move(1)
+
+	assert.Equal(t, 1, testSnake.Head.X)
+	assert.Equal(t, 1, testSnake.Head.Y)
+
+	assert.Equal(t, 0, testSnake.Head.Next.X)
+	assert.Equal(t, 1, testSnake.Head.Next.Y)
+
+	assert.Equal(t, 0, testSnake.Head.Next.Next.X)
+	assert.Equal(t, 0, testSnake.Head.Next.Next.Y)
+
+	testSnake.Move(2)
+
+	assert.Equal(t, 1, testSnake.Head.X)
+	assert.Equal(t, 0, testSnake.Head.Y)
+
+	assert.Equal(t, 1, testSnake.Head.Next.X)
+	assert.Equal(t, 1, testSnake.Head.Next.Y)
+
+	assert.Equal(t, 0, testSnake.Head.Next.Next.X)
+	assert.Equal(t, 1, testSnake.Head.Next.Next.Y)
+
+	assert.Equal(t, 0, testSnake.Head.Next.Next.Next.X)
+	assert.Equal(t, 0, testSnake.Head.Next.Next.Next.Y)
+
+	testSnake.Move(2)
+
+	assert.Equal(t, 1, testSnake.Head.X)
+	assert.Equal(t, -1, testSnake.Head.Y)
+
+	assert.Equal(t, 1, testSnake.Head.Next.X)
+	assert.Equal(t, 0, testSnake.Head.Next.Y)
+
+	assert.Equal(t, 1, testSnake.Head.Next.Next.X)
+	assert.Equal(t, 1, testSnake.Head.Next.Next.Y)
+
+	assert.Equal(t, 0, testSnake.Head.Next.Next.Next.X)
+	assert.Equal(t, 1, testSnake.Head.Next.Next.Next.Y)
+
+	assert.Equal(t, 0, testSnake.Head.Next.Next.Next.Next.X)
+	assert.Equal(t, 0, testSnake.Head.Next.Next.Next.Next.Y)
+
+	testSnake.Move(3)
+
+	assert.Equal(t, 0, testSnake.Head.X)
+	assert.Equal(t, -1, testSnake.Head.Y)
+
+	assert.Equal(t, 1, testSnake.Head.Next.X)
+	assert.Equal(t, -1, testSnake.Head.Next.Y)
+
+	assert.Equal(t, 1, testSnake.Head.Next.Next.X)
+	assert.Equal(t, 0, testSnake.Head.Next.Next.Y)
+
+	assert.Equal(t, 1, testSnake.Head.Next.Next.Next.X)
+	assert.Equal(t, 1, testSnake.Head.Next.Next.Next.Y)
+
+	assert.Equal(t, 0, testSnake.Head.Next.Next.Next.Next.X)
+	assert.Equal(t, 1, testSnake.Head.Next.Next.Next.Next.Y)
+
+	assert.Equal(t, 0, testSnake.Head.Next.Next.Next.Next.Next.X)
+	assert.Equal(t, 0, testSnake.Head.Next.Next.Next.Next.Next.Y)
 }
