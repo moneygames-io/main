@@ -7,10 +7,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type msg struct {
-	Msg string
-}
-
 func wsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Origin") != "http://"+r.Host {
 		http.Error(w, "Origin not allowed", 403)
@@ -27,7 +23,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 func reply(conn *websocket.Conn) {
 	for {
-		m := msg{}
+		m := Msg{}
 
 		err := conn.ReadJSON(&m)
 		if err != nil {
@@ -36,14 +32,14 @@ func reply(conn *websocket.Conn) {
 
 		fmt.Printf("Got message: %#v\n", m)
 
-		r := msg{}
-		switch m.Msg {
+		r := Msg{}
+		switch m.SomeData {
 			case "hi":
-				r.Msg = "hey"
+				r.SomeData = "hey"
 			case "hello":
-				r.Msg = "sup"
+				r.SomeData = "sup"
 			default:
-				r.Msg = "Don't know that one."
+				r.SomeData = "Don't know that one."
 		}
 		if err = conn.WriteJSON(r); err != nil {
 			fmt.Println(err)
