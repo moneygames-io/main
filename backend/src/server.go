@@ -22,12 +22,15 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func reply(conn *websocket.Conn) {
+	defer conn.Close()
+
 	for {
 		m := Msg{}
 
 		err := conn.ReadJSON(&m)
 		if err != nil {
 			fmt.Println("Error reading json.", err)
+			break
 		}
 
 		fmt.Printf("Got message: %#v\n", m)
