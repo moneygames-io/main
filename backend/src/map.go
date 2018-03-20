@@ -6,7 +6,7 @@ type Tile struct {
 }
 
 type Map struct {
-	Tiles [][]Tile
+	Tiles   [][]Tile
 	Players map[string]*Snake
 }
 
@@ -24,7 +24,7 @@ func NewMap(players int) *Map {
 	newMap.Tiles = [players * 100][players * 100]Tile{}
 	for rows := 0; rows < len(newMap.Tiles); rows++ {
 		for cols := 0; cols < len(newMap.Tiles[0]); cols++ {
-			
+
 		}
 	}
 
