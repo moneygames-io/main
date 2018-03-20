@@ -8,7 +8,8 @@
 			<form>
 				<label for="message">Message</label>
 				<input type="text" id="message" placeholder="msg"/><br/>
-				<button type="button" id="sendBtn">Send</button>
+				<button type="button" id="btnSend">Send</button>
+				<button type="button" id="btnCloseWs">Close Socket</button>
 			</form>
 		</div>
 		<div id="container"></div>
@@ -39,9 +40,13 @@
 					return socket;
 				}
 
-				$("#sendBtn").click(function (e) {
+				$("#btnSend").click(function (e) {
 					e.preventDefault();
 					ws.send(JSON.stringify({ SomeData: $("#message").val() }));
+				});
+				$("#btnCloseWs").click(function (e) {
+					e.preventDefault();
+					ws.close();
 				});
 			});
 		</script>
