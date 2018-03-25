@@ -5,7 +5,7 @@ import (
 )
 
 type Snake struct {
-	Player           string
+	Player           *Player
 	Length           int
 	CurrentDirection int
 	Head             *SnakeNode
@@ -35,9 +35,10 @@ func (snake *Snake) Move(direction int) {
 	case 0: // Empty Cell
 		snake.ShortenTail(1)
 		break
-	case 1:
+	case 1: // Found Food
+		snake.Events.RemoveFood(snake.Head.Y, snake)
 		break
-	case 2:
+	case 2: // Dead
 		snake.ShortenTail(1)
 		snake.Dead()
 	}
@@ -79,7 +80,7 @@ func (snake *Snake) GrowHead() int {
 	snake.Head = newHead
 	snake.Length = snake.Length + 1
 
-	return snake.Events.HeadMoved(snake)
+	return snake.Events.AddNode(snake)
 }
 
 func (snake *Snake) ShortenTail(howMuch int) *SnakeNode {
@@ -94,7 +95,7 @@ func (snake *Snake) ShortenTail(howMuch int) *SnakeNode {
 	snake.Tail = newTail
 	snake.Length = snake.Length - 1
 
-	snake.Events.RemoveTailNode(oldTail)
+	snake.Events.RemoveNode(oldTail)
 
 	if howMuch > 1 { // more tail to get rid off
 		return snake.ShortenTail(howMuch - 1)
@@ -110,7 +111,7 @@ func (snake *Snake) Dead() {
 		snake.Dead()
 	} else {
 		snake.Length = 0
-		snake.Events.RemoveTailNode(snake.Head)
+		snake.Events.RemoveNode(snake.Head)
 		snake.Events.SnakeRemoved(snake)
 		snake.Events.AddFood(&Food{snake.Head.X, snake.Head.Y})
 		snake.Tail = nil

@@ -19,12 +19,12 @@ func (dm *DummyMap) SnakeCreated(sn *Snake) {
 	dm.Created++
 }
 
-func (dm *DummyMap) HeadMoved(sn *Snake) int {
+func (dm *DummyMap) AddNode(sn *SnakeNode) int {
 	dm.AddSN++
 	return dm.IntendedReturn
 }
 
-func (dm *DummyMap) RemoveTailNode(sn *SnakeNode) {
+func (dm *DummyMap) RemoveNode(row int, col int) {
 	dm.RemoveSN++
 }
 
@@ -32,7 +32,7 @@ func (dm *DummyMap) AddFood(sn *Food) {
 	dm.AddF++
 }
 
-func (dm *DummyMap) RemoveFood(sn *Food) {
+func (dm *DummyMap) RemoveFood(row int, col int) {
 	dm.RemoveF++
 }
 
