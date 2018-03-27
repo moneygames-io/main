@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"github.com/Parth/boolean"
 )
 
 type Tile struct {
@@ -11,28 +12,31 @@ type Tile struct {
 
 type Map struct {
 	Tiles [][]Tile
-	Players map[string]*Player
-	Losers map[string]*Player
+	Players map[*Player]*Snake
 }
 
 type MapEvent interface {
 	SnakeCreated(*Snake)
 	AddNode(*SnakeNode) int
-	RemoveNode(row int, col int)
+	RemoveNode(int, int)
 	AddFood(*Food)
-	RemoveFood(row int, col int)
+	RemoveFood(int, int)
 	SnakeRemoved(*Snake)
 }
 
 func NewMap(players int) *Map {
 	newMap := &Map{}
-	newMap.Tiles = [players * 100][players * 100]Tile{}
-	newMap.Players = make(map[string]*Player)
-	newMap.Losers = make(map[string]*Player)
+	newMap.Tiles = make([][]Tile, players * 100)
+
+	for i := range newMap.Tiles {
+		newMap.Tiles[i] = make([]Tile, players * 100)
+	}
+
+	newMap.Players = make(map[*Player]*Snake)
 	return newMap
 }
 
-func (m *Map) SpawnNewPlayer(player *Player) bool {
+func (m *Map) SpawnNewPlayer(player *Player) {
 	row := rand.Intn(len(m.Tiles))
 	col := rand.Intn(len(m.Tiles[0]))
 
@@ -41,56 +45,57 @@ func (m *Map) SpawnNewPlayer(player *Player) bool {
 		col = rand.Intn(len(m.Tiles[0]))
 	}
 
-	map.Players[player.Name] = NewSnake(col, row, m)
+	m.Players[player] = NewSnake(col, row, m)
 }
 
 func (m *Map) SnakeCreated(snake *Snake) {
-	m.Tiles[x][y].Snake = snake
-	m.Tiles[x][y].Depth++
+	m.AddNode(snake.Head)
 }
 
 func (m *Map) AddNode(snakeNode *SnakeNode) int {
-	x := snakeNode.X
-	y := snakeNode.Y
+	col := snakeNode.X
+	row := snakeNode.Y
 
-	if m.Tiles[y][x].Snake != nil {
-		if snake != m.Tiles[y][x] {
+	if m.Tiles[row][col].Snake != nil {
+		if snakeNode.Snake != m.Tiles[row][col].Snake {
 			return 2
 		}
 	}
 
-	if m.Tiles[y][x].Food != nil {
-		return 1
-	}
-
-	return 0
+	m.Tiles[row][col].Snake = snakeNode.Snake
+	return boolean.BtoI(m.Tiles[row][col].Food != nil)
 }
 
-func (m *Map) RemoveTailNode(x int, y int) {
-	m.Tiles[y][x].Snake = nil
+func (m *Map) RemoveNode(col int, row int) {
+	m.Tiles[row][col].Snake = nil
 }
 
 func (m *Map) AddFood(food *Food) {
-	x := food.X
-    y := food.Y
+	col := food.X
+    row := food.Y
 
-	m.Tiles[y][x] = food
+	m.Tiles[row][col].Food = food
 }
 
-func (m *Map) RemoveFood(x int, y int) {
-	m.Tiles[y][x].Food = nil
+func (m *Map) RemoveFood(col int, row int) {
+	m.Tiles[row][col].Food = nil
 
 }
 
 func (m *Map) SnakeRemoved(snake *Snake) {
 	m.Players[snake.Player] = nil
-	m.Losers[snake.Player] = snake
 }
 
 func (m *Map) update() {
-
+	for player, snake := range m.Players {
+		if player.CurrentSprint {
+			snake.Sprint(player.CurrentDirection)
+		} else {
+			snake.Move(player.CurrentDirection)
+		}
+	}
 }
 
 func (m *Map) render() [][]Tile {
-
+	return m.Tiles
 }
