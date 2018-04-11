@@ -19,6 +19,7 @@ func printMap(m *Map) {
 		}
 		fmt.Println()
 	}
+	fmt.Println()
 }
 
 func TestNewMap(t *testing.T) {
@@ -59,7 +60,68 @@ func TestPlayerSpawning(t *testing.T) {
 	assert.NotNil(t, p.Snake, "Snake not created properly")
 }
 
-func TestPlayerMovement(t *testing.T) {
+func TestPlayerMovement0ToEdge(t *testing.T) {
+	m := NewMap(1)
+	p := &Player{"Parth", 0, 0, false, "none", nil}
+	x, y := m.SpawnNewPlayer(p)
+
+	p.CurrentDirection = 0
+	updatesLeft := len(m.Tiles) - y - 1
+
+	for i := 0; i < updatesLeft; i++ {
+		m.update()
+	}
+
+	assert.Equal(t, x, p.Snake.Head.X, "Snake did not move in the right direction")
+	assert.Equal(t, y + updatesLeft, p.Snake.Head.Y, "Snake did not move in the right direction")
+}
+
+func TestPlayerMovement1ToEdge(t *testing.T) {
+	m := NewMap(1)
+	p := &Player{"Parth", 0, 0, false, "none", nil}
+	x, y := m.SpawnNewPlayer(p)
+
+	p.CurrentDirection = 1
+	updatesLeft := len(m.Tiles[0]) - x - 1
+
+	for i := 0; i < updatesLeft; i++ {
+		m.update()
+	}
+
+	assert.Equal(t, x + updatesLeft, p.Snake.Head.X, "Snake did not move in the right direction")
+	assert.Equal(t, y, p.Snake.Head.Y, "Snake did not move in the right direction")
+}
+
+func TestPlayerMovement2ToEdge(t *testing.T) {
+	m := NewMap(1)
+	p := &Player{"Parth", 0, 0, false, "none", nil}
+	x, y := m.SpawnNewPlayer(p)
+
+	p.CurrentDirection = 2
+	updatesLeft := y
+
+	for i := 0; i < updatesLeft; i++ {
+		m.update()
+	}
+
+	assert.Equal(t, x, p.Snake.Head.X, "Snake did not move in the right direction")
+	assert.Equal(t, 0, p.Snake.Head.Y, "Snake did not move in the right direction")
+}
+
+func TestPlayerMovement3ToEdge(t *testing.T) {
+	m := NewMap(1)
+	p := &Player{"Parth", 0, 0, false, "none", nil}
+	x, y := m.SpawnNewPlayer(p)
+
+	p.CurrentDirection = 3
+	updatesLeft := x
+
+	for i := 0; i < updatesLeft; i++ {
+		m.update()
+	}
+
+	assert.Equal(t, 0, p.Snake.Head.X, "Snake did not move in the right direction")
+	assert.Equal(t, y, p.Snake.Head.Y, "Snake did not move in the right direction")
 }
 
 func TestMultiPlayerDynamics(t *testing.T) {

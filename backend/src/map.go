@@ -38,7 +38,7 @@ func NewMap(players int) *Map {
 	return newMap
 }
 
-func (m *Map) SpawnNewPlayer(player *Player) (col int, row int) {
+func (m *Map) SpawnNewPlayer(player *Player) (int, int) {
 	// TODO, don't do this if the board is already full
 	rand.Seed(time.Now().UnixNano())
 	row := rand.Intn(len(m.Tiles))
@@ -51,6 +51,8 @@ func (m *Map) SpawnNewPlayer(player *Player) (col int, row int) {
 
 	m.Players[player] = NewSnake(col, row, m, player)
 	player.Snake = m.Players[player]
+
+	return col, row
 }
 
 func (m *Map) SnakeCreated(snake *Snake) {
@@ -60,6 +62,10 @@ func (m *Map) SnakeCreated(snake *Snake) {
 func (m *Map) AddNode(snakeNode *SnakeNode) int {
 	col := snakeNode.X
 	row := snakeNode.Y
+
+	if row >= len(m.Tiles) || col >= len(m.Tiles[row]) {
+		return 2
+	}
 
 	if m.Tiles[row][col].Snake != nil {
 		if snakeNode.Snake != m.Tiles[row][col].Snake {
