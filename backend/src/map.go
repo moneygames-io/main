@@ -1,3 +1,4 @@
+// TODO Standardize between row/col and x/y across the app
 package main
 
 import (
@@ -37,7 +38,7 @@ func NewMap(players int) *Map {
 	return newMap
 }
 
-func (m *Map) SpawnNewPlayer(player *Player) {
+func (m *Map) SpawnNewPlayer(player *Player) (col int, row int) {
 	// TODO, don't do this if the board is already full
 	rand.Seed(time.Now().UnixNano())
 	row := rand.Intn(len(m.Tiles))
@@ -49,6 +50,7 @@ func (m *Map) SpawnNewPlayer(player *Player) {
 	}
 
 	m.Players[player] = NewSnake(col, row, m, player)
+	player.Snake = m.Players[player]
 }
 
 func (m *Map) SnakeCreated(snake *Snake) {

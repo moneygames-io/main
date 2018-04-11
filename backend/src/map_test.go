@@ -22,6 +22,11 @@ func printMap(m *Map) {
 }
 
 func TestNewMap(t *testing.T) {
+	m := NewMap(1)
+	assert.NotNil(t, m)
+	assert.NotNil(t, m.Tiles)
+	assert.NotNil(t, m.Tiles[0])
+	assert.NotNil(t, m.Players)
 }
 
 func TestPlayerSpawning(t *testing.T) {
@@ -51,7 +56,7 @@ func TestPlayerSpawning(t *testing.T) {
 	}
 
 	assert.False(t, found, "Food should not have been found on this map")
-
+	assert.NotNil(t, p.Snake, "Snake not created properly")
 }
 
 func TestPlayerMovement(t *testing.T) {
