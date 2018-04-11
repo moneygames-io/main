@@ -13,7 +13,7 @@ type Snake struct {
 	Events           MapEvent
 }
 
-func NewSnake(x int, y int, events MapEvent) *Snake {
+func NewSnake(x int, y int, events MapEvent, player ...*Player) *Snake {
 	s := new(Snake)
 	s.Head = &SnakeNode{s, x, y, nil, nil}
 	s.Tail = s.Head
@@ -22,6 +22,9 @@ func NewSnake(x int, y int, events MapEvent) *Snake {
 	s.Events = events
 
 	s.Events.SnakeCreated(s)
+	if len(player) > 0 {
+		s.Player = player[0]
+	}
 	return s
 }
 

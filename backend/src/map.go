@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"time"
 	"github.com/Parth/boolean"
 )
 
@@ -37,6 +38,8 @@ func NewMap(players int) *Map {
 }
 
 func (m *Map) SpawnNewPlayer(player *Player) {
+	// TODO, don't do this if the board is already full
+	rand.Seed(time.Now().UnixNano())
 	row := rand.Intn(len(m.Tiles))
 	col := rand.Intn(len(m.Tiles[0]))
 
@@ -45,7 +48,7 @@ func (m *Map) SpawnNewPlayer(player *Player) {
 		col = rand.Intn(len(m.Tiles[0]))
 	}
 
-	m.Players[player] = NewSnake(col, row, m)
+	m.Players[player] = NewSnake(col, row, m, player)
 }
 
 func (m *Map) SnakeCreated(snake *Snake) {
