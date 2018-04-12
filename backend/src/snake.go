@@ -78,12 +78,17 @@ func (snake *Snake) GrowHead() int {
 	newHead.Next = oldHead
 	newHead.Prev = nil
 
-	oldHead.Prev = newHead
+	status := snake.Events.AddNode(newHead)
 
-	snake.Head = newHead
-	snake.Length = snake.Length + 1
+	// Was it added?
+	if status != 2 {
+		oldHead.Prev = newHead
 
-	return snake.Events.AddNode(snake.Head)
+		snake.Head = newHead
+		snake.Length = snake.Length + 1
+	}
+
+	return status
 }
 
 func (snake *Snake) ShortenTail(howMuch int) *SnakeNode {

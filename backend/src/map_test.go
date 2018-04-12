@@ -28,12 +28,14 @@ func TestNewMap(t *testing.T) {
 	assert.NotNil(t, m.Tiles)
 	assert.NotNil(t, m.Tiles[0])
 	assert.NotNil(t, m.Players)
+	// TODO make sure every tile is not null
 }
 
 func TestPlayerSpawning(t *testing.T) {
 	m := NewMap(1)
 	p := &Player{"Parth", 0, 0, false, "none", nil}
-	m.SpawnNewPlayer(p)
+	x, y := m.SpawnNewPlayer(p)
+	assert.NotNil(t, m.Tiles[y][x].Snake)
 
 	found := false
 	for r := range m.Tiles {
@@ -66,27 +68,26 @@ func TestPlayerMovement0ToEdge(t *testing.T) {
 	x, y := m.SpawnNewPlayer(p)
 
 	p.CurrentDirection = 0
-	updatesLeft := len(m.Tiles) - y - 1
 
-	for i := 0; i < updatesLeft; i++ {
-		m.update()
-	}
-
-	assert.Equal(t, x, p.Snake.Head.X, "Snake did not move in the right direction")
-	assert.Equal(t, y + updatesLeft, p.Snake.Head.Y, "Snake did not move in the right direction")
+	m.update()
+	assert.NotNil(t, m.Tiles[y+1][x].Snake)
+	// TODO complete this test
 }
 
 func TestPlayerMovement1ToEdge(t *testing.T) {
 	m := NewMap(1)
 	p := &Player{"Parth", 0, 0, false, "none", nil}
 	x, y := m.SpawnNewPlayer(p)
+	printMap(m)
 
 	p.CurrentDirection = 1
 	updatesLeft := len(m.Tiles[0]) - x - 1
 
 	for i := 0; i < updatesLeft; i++ {
+		printMap(m)
 		m.update()
 	}
+
 
 	assert.Equal(t, x + updatesLeft, p.Snake.Head.X, "Snake did not move in the right direction")
 	assert.Equal(t, y, p.Snake.Head.Y, "Snake did not move in the right direction")
