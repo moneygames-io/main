@@ -15,6 +15,7 @@ type Tile struct {
 type Map struct {
 	Tiles [][]Tile
 	Players map[*Player]*Snake
+	Losers map[*Player]*Snake
 }
 
 type MapEvent interface {
@@ -35,6 +36,7 @@ func NewMap(players int) *Map {
 	}
 
 	newMap.Players = make(map[*Player]*Snake)
+	newMap.Losers = make(map[*Player]*Snake)
 	return newMap
 }
 
@@ -63,7 +65,11 @@ func (m *Map) AddNode(snakeNode *SnakeNode) int {
 	col := snakeNode.X
 	row := snakeNode.Y
 
-	if row >= len(m.Tiles) || col >= len(m.Tiles[row]) {
+	if row >= len(m.Tiles) || col >= len(m.Tiles[0]) {
+		return 2
+	}
+
+	if row < 0 || col < 0 {
 		return 2
 	}
 
@@ -95,9 +101,10 @@ func (m *Map) RemoveFood(col int, row int) {
 
 func (m *Map) SnakeRemoved(snake *Snake) {
 	m.Players[snake.Player] = nil
+	m.Losers[snake.Player] = snake
 }
 
-func (m *Map) update() {
+func (m *Map) Update() {
 	for player, snake := range m.Players {
 		if player.CurrentSprint {
 			snake.Sprint(player.CurrentDirection)

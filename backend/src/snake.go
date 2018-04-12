@@ -42,7 +42,6 @@ func (snake *Snake) Move(direction int) {
 		snake.Events.RemoveFood(snake.Head.X, snake.Head.Y)
 		break
 	case 2: // Dead
-		snake.ShortenTail(1)
 		snake.Dead()
 	}
 }
