@@ -148,5 +148,43 @@ func TestPlayerMovement3ToEdge(t *testing.T) {
 	assert.Equal(t, p.Snake, m.Losers[p])
 }
 
+func TestFoodDynamics(t *testing.T) {
+	m := NewMap(1)
+	p := &Player{"Parth", 0, 0, false, "none", nil}
+	m.SpawnNewPlayerAt(p, 3, 3)
+	m.AddFood(&Food{3, 5})
+	m.AddFood(&Food{5, 5})
+	p.CurrentDirection = 0
+
+	assert.NotNil(t, m.Tiles[3][3].Snake)
+	assert.NotNil(t, m.Tiles[5][3].Food)
+	assert.NotNil(t, m.Tiles[5][5].Food)
+
+	m.Update()
+	m.Update()
+
+	assert.Equal(t, 2, p.Snake.Length)
+
+	p.CurrentDirection = 1
+
+	m.Update()
+	assert.Equal(t, 2, p.Snake.Length)
+
+	m.Update()
+	assert.Equal(t, 3, p.Snake.Length)
+
+	for i := 0; i < 5; i++ {
+		m.Update()
+	}
+
+	assert.Nil(t, m.Tiles[5][9].Snake)
+	assert.Nil(t, m.Tiles[5][8].Snake)
+	assert.Nil(t, m.Tiles[5][7].Snake)
+
+	assert.NotNil(t, m.Tiles[5][9].Food)
+	assert.NotNil(t, m.Tiles[5][8].Food)
+	assert.NotNil(t, m.Tiles[5][7].Food)
+}
+
 func TestMultiPlayerDynamics(t *testing.T) {
 }

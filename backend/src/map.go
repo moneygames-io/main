@@ -41,19 +41,26 @@ func NewMap(players int) *Map {
 }
 
 func (m *Map) SpawnNewPlayer(player *Player) (int, int) {
-	// TODO, don't do this if the board is already full
 	rand.Seed(time.Now().UnixNano())
 	row := rand.Intn(len(m.Tiles))
 	col := rand.Intn(len(m.Tiles[0]))
 
 	for m.Tiles[row][col].Snake != nil && m.Tiles[row][col].Food != nil {
+		// TODO infinite loop risk
 		row = rand.Intn(len(m.Tiles))
 		col = rand.Intn(len(m.Tiles[0]))
 	}
 
+	return m.SpawnNewPlayerAt(player, col, row)
+}
+
+func (m *Map) SpawnNewPlayerAt(player *Player, col int, row int) (int, int) {
+	// TODO check if occupied?
 	m.Players[player] = NewSnake(col, row, m, player)
 	player.Snake = m.Players[player]
 
+	// TODO is this return needed? 
+	// Possibly, could be used to indicate a different location if this one is occupied
 	return col, row
 }
 
