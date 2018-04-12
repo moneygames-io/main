@@ -1,14 +1,14 @@
 package main
 
 import (
-	"testing"
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func printMap(m *Map) {
 	for r := range m.Tiles {
-		for c := range m.Tiles[0]{
+		for c := range m.Tiles[0] {
 			if m.Tiles[r][c].Snake != nil {
 				fmt.Print("S")
 			} else if m.Tiles[r][c].Food != nil {
@@ -42,7 +42,7 @@ func TestPlayerSpawning(t *testing.T) {
 
 	found := false
 	for r := range m.Tiles {
-		for c := range m.Tiles[0]{
+		for c := range m.Tiles[0] {
 			if m.Tiles[r][c].Snake != nil && m.Tiles[r][c].Snake.Player != nil {
 				found = true
 			}
@@ -54,7 +54,7 @@ func TestPlayerSpawning(t *testing.T) {
 	found = false
 
 	for r := range m.Tiles {
-		for c := range m.Tiles[0]{
+		for c := range m.Tiles[0] {
 			if m.Tiles[r][c].Food != nil {
 				found = true
 			}
@@ -77,9 +77,8 @@ func TestPlayerMovement0ToEdge(t *testing.T) {
 		m.Update()
 	}
 
-
 	assert.Equal(t, x, p.Snake.Head.X, "Snake did not move in the right direction")
-	assert.Equal(t, y + updatesLeft, p.Snake.Head.Y, "Snake did not move in the right direction")
+	assert.Equal(t, y+updatesLeft, p.Snake.Head.Y, "Snake did not move in the right direction")
 
 	m.Update()
 	assert.Equal(t, 0, p.Snake.Length)
@@ -99,8 +98,7 @@ func TestPlayerMovement1ToEdge(t *testing.T) {
 		m.Update()
 	}
 
-
-	assert.Equal(t, x + updatesLeft, p.Snake.Head.X, "Snake did not move in the right direction")
+	assert.Equal(t, x+updatesLeft, p.Snake.Head.X, "Snake did not move in the right direction")
 	assert.Equal(t, y, p.Snake.Head.Y, "Snake did not move in the right direction")
 
 	m.Update()

@@ -1,10 +1,10 @@
 package main
 
 type Player struct {
-	Name string
+	Name             string
 	CurrentDirection int
 	CurrentZoomLevel int
-	CurrentSprint bool
-	WalletAddress string
-	Snake *Snake
+	CurrentSprint    bool
+	WalletAddress    string
+	Snake            *Snake
 }

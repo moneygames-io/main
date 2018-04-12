@@ -2,20 +2,20 @@
 package main
 
 import (
+	"github.com/Parth/boolean"
 	"math/rand"
 	"time"
-	"github.com/Parth/boolean"
 )
 
 type Tile struct {
 	Snake *Snake
-	Food *Food
+	Food  *Food
 }
 
 type Map struct {
-	Tiles [][]Tile
+	Tiles   [][]Tile
 	Players map[*Player]*Snake
-	Losers map[*Player]*Snake
+	Losers  map[*Player]*Snake
 }
 
 type MapEvent interface {
@@ -29,10 +29,10 @@ type MapEvent interface {
 
 func NewMap(players int) *Map {
 	newMap := &Map{}
-	newMap.Tiles = make([][]Tile, players * 10)
+	newMap.Tiles = make([][]Tile, players*10)
 
 	for i := range newMap.Tiles {
-		newMap.Tiles[i] = make([]Tile, players * 10)
+		newMap.Tiles[i] = make([]Tile, players*10)
 	}
 
 	newMap.Players = make(map[*Player]*Snake)
@@ -89,7 +89,7 @@ func (m *Map) RemoveNode(col int, row int) {
 
 func (m *Map) AddFood(food *Food) {
 	col := food.X
-    row := food.Y
+	row := food.Y
 
 	m.Tiles[row][col].Food = food
 }

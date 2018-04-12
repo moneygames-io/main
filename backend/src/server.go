@@ -38,12 +38,12 @@ func reply(conn *websocket.Conn) {
 
 		r := msg{}
 		switch m.Msg {
-			case "hi":
-				r.Msg = "hey"
-			case "hello":
-				r.Msg = "sup"
-			default:
-				r.Msg = "Don't know that one."
+		case "hi":
+			r.Msg = "hey"
+		case "hello":
+			r.Msg = "sup"
+		default:
+			r.Msg = "Don't know that one."
 		}
 		if err = conn.WriteJSON(r); err != nil {
 			fmt.Println(err)
