@@ -5,7 +5,7 @@ import (
 )
 
 type Snake struct {
-	Player           string
+	Player           *Player
 	Length           int
 	CurrentDirection int
 	Head             *SnakeNode
@@ -13,7 +13,7 @@ type Snake struct {
 	Events           MapEvent
 }
 
-func NewSnake(x int, y int, events MapEvent) *Snake {
+func NewSnake(x int, y int, events MapEvent, player ...*Player) *Snake {
 	s := new(Snake)
 	s.Head = &SnakeNode{s, x, y, nil, nil}
 	s.Tail = s.Head
@@ -22,6 +22,9 @@ func NewSnake(x int, y int, events MapEvent) *Snake {
 	s.Events = events
 
 	s.Events.SnakeCreated(s)
+	if len(player) > 0 {
+		s.Player = player[0]
+	}
 	return s
 }
 
@@ -35,10 +38,10 @@ func (snake *Snake) Move(direction int) {
 	case 0: // Empty Cell
 		snake.ShortenTail(1)
 		break
-	case 1: // Food TODO Remove?
+	case 1: // Found Food
+		snake.Events.RemoveFood(snake.Head.X, snake.Head.Y)
 		break
-	case 2:
-		snake.ShortenTail(1)
+	case 2: // Dead
 		snake.Dead()
 	}
 }
@@ -74,12 +77,17 @@ func (snake *Snake) GrowHead() int {
 	newHead.Next = oldHead
 	newHead.Prev = nil
 
-	oldHead.Prev = newHead
+	status := snake.Events.AddNode(newHead)
 
-	snake.Head = newHead
-	snake.Length = snake.Length + 1
+	// Was it added?
+	if status != 2 {
+		oldHead.Prev = newHead
 
-	return snake.Events.HeadMoved(snake)
+		snake.Head = newHead
+		snake.Length = snake.Length + 1
+	}
+
+	return status
 }
 
 func (snake *Snake) ShortenTail(howMuch int) *SnakeNode {
@@ -94,7 +102,7 @@ func (snake *Snake) ShortenTail(howMuch int) *SnakeNode {
 	snake.Tail = newTail
 	snake.Length = snake.Length - 1
 
-	snake.Events.RemoveTailNode(oldTail)
+	snake.Events.RemoveNode(oldTail.X, oldTail.Y)
 
 	if howMuch > 1 { // more tail to get rid off
 		return snake.ShortenTail(howMuch - 1)
@@ -110,7 +118,7 @@ func (snake *Snake) Dead() {
 		snake.Dead()
 	} else {
 		snake.Length = 0
-		snake.Events.RemoveTailNode(snake.Head)
+		snake.Events.RemoveNode(snake.Head.X, snake.Head.Y)
 		snake.Events.SnakeRemoved(snake)
 		snake.Events.AddFood(&Food{snake.Head.X, snake.Head.Y})
 		snake.Tail = nil

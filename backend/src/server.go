@@ -34,7 +34,7 @@ func reply(conn *websocket.Conn) {
 		}
 
 		fmt.Printf("Got message: %#v\n", m)
-
+    
 		r := Msg{}
 		switch m.SomeData {
 		case "hi":
