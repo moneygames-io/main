@@ -28,7 +28,7 @@ type MapEvent interface {
 }
 
 func NewMap(players int) *Map {
-	newMap := &Map{}
+  newMap := &Map{}
 	newMap.Tiles = make([][]Tile, players*10)
 
 	for i := range newMap.Tiles {
