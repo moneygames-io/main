@@ -124,3 +124,5 @@ func (m *Map) Update() {
 func (m *Map) render() [][]Tile {
 	return m.Tiles
 }
+
+// TODO add get number of snakes/ get number of foods

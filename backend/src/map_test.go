@@ -187,4 +187,23 @@ func TestFoodDynamics(t *testing.T) {
 }
 
 func TestMultiPlayerDynamics(t *testing.T) {
+	m := NewMap(3)
+	p1 := &Player{"P1", 0, 0, false, "none", nil}
+	p1 := &Player{"P2", 0, 0, false, "none", nil}
+	p1 := &Player{"P3", 0, 0, false, "none", nil}
+
+	m.SpawnNewPlayerAt(p1, 24, 21)
+	m.SpawnNewPlayerAt(p2, 25, 24)
+	m.SpawnNewPlayerAt(p3, 24, 28)
+
+	m.AddFood(&Food{20, 20})
+    m.AddFood(&Food{20, 20})
+    m.AddFood(&Food{20, 20})
+    m.AddFood(&Food{20, 20})
+    m.AddFood(&Food{20, 20})
+    m.AddFood(&Food{20, 20})
+    m.AddFood(&Food{20, 20})
+    m.AddFood(&Food{20, 20})
+    m.AddFood(&Food{20, 20})
+    m.AddFood(&Food{20, 20})
 }
