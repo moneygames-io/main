@@ -7,16 +7,11 @@ import (
 	"net/http"
 )
 
-type Msg struct {
-	N int
-	M int
-}
-
-var messages []chan int
-var sockets int = 0
-var poolsize int = 100
+var matchmaker *Matchmaker
 
 func main() {
+	matchmaker = NewMatchmaker(10)
+
 	http.HandleFunc("/ws", wsHandler)
 	http.HandleFunc("/", rootHandler)
 
@@ -41,25 +36,5 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Could not open websocket connection", http.StatusBadRequest)
 	}
 
-	message := make(chan int)
-	messages = append(messages, message)
-
-	go echo(conn, message)
-	sockets++
-
-	for _, m := range messages {
-		m <- 1
-	}
-}
-
-func echo(conn *websocket.Conn, message chan int) {
-	for {
-		select {
-			case <- message:
-				fmt.Println(Msg{sockets, poolsize})
-				if err := conn.WriteJSON(Msg{sockets, poolsize}); err != nil {
-					fmt.Println(err)
-				}
-		}
-	}
+	matchmaker.PlayerJoined(conn)
 }
