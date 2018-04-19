@@ -7,17 +7,19 @@ import (
 	"net/http"
 )
 
-type msg struct {
-	Num int
+type Msg struct {
+	n int
+	m int
 }
 
-var sockets int
+var messages []chan int
+var sockets int = 0
+var poolsize int = 100
 
 func main() {
 	http.HandleFunc("/ws", wsHandler)
 	http.HandleFunc("/", rootHandler)
 
-	sockets = 0
 	panic(http.ListenAndServe(":8080", nil))
 }
 
@@ -39,23 +41,25 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Could not open websocket connection", http.StatusBadRequest)
 	}
 
+	message := make(chan int)
+	messages = append(messages, message)
+
+	go echo(conn, message)
 	sockets++
-	go echo(conn)
+
+	for _, m := range messages {
+		m <- 1
+	}
 }
 
-func echo(conn *websocket.Conn) {
+func echo(conn *websocket.Conn, message chan int) {
 	for {
-		m := msg{}
-
-		err := conn.ReadJSON(&m)
-		if err != nil {
-			fmt.Println("Error reading json.", err)
-		}
-
-		fmt.Printf("Got message: %#v\n", m)
-
-		if err = conn.WriteJSON(msg{sockets}); err != nil {
-			fmt.Println(err)
+		select {
+			case <- message:
+				fmt.Println(Msg{sockets, poolsize})
+				if err := conn.WriteJSON(Msg{sockets, poolsize}); err != nil {
+					fmt.Println(err)
+				}
 		}
 	}
 }
