@@ -8,8 +8,8 @@ import (
 )
 
 type Msg struct {
-	n int
-	m int
+	N int
+	M int
 }
 
 var messages []chan int
