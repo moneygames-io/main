@@ -10,7 +10,7 @@ import (
 var matchmaker *Matchmaker
 
 func main() {
-	matchmaker = NewMatchmaker(10)
+	matchmaker = NewMatchmaker(3)
 
 	http.HandleFunc("/ws", wsHandler)
 	http.HandleFunc("/", rootHandler)
