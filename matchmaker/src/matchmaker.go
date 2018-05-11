@@ -8,11 +8,14 @@ import(
 type Matchmaker struct {
 	statusChannels []chan int
 	gameserverChannel []chan string
+	availableServers []string
+	busyServers []string
 	CurrentClients int
 	TargetClients int
 }
 
 func NewMatchmaker(target int) *Matchmaker {
+	availableServers := []string{"localhost:8001"}
 	return &Matchmaker{nil, nil, 0, target}
 }
 
