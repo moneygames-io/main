@@ -15,7 +15,7 @@ func main() {
 	http.HandleFunc("/ws", wsHandler)
 	http.HandleFunc("/", rootHandler)
 
-	panic(http.ListenAndServe(":8080", nil))
+	panic(http.ListenAndServe(":8000", nil))
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {

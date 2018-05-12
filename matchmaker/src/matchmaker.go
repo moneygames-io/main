@@ -15,8 +15,9 @@ type Matchmaker struct {
 }
 
 func NewMatchmaker(target int) *Matchmaker {
-	availableServers := []string{"localhost:8001"}
-	return &Matchmaker{nil, nil, 0, target}
+	availableServers := []string{"localhost:10000"}
+	busyServers := []string{}
+	return &Matchmaker{nil, nil, availableServers, busyServers, 0, target}
 }
 
 func (m *Matchmaker) PlayerJoined (conn *websocket.Conn) {
