@@ -7,16 +7,28 @@ import(
 
 type Matchmaker struct {
 	statusChannels []chan int
-	gameserverChannel []chan string
-	availableServers []string
-	busyServers []string
+	gameserverChannel []chan Server
+	availableServers []Server
+	busyServers []Server
 	CurrentClients int
 	TargetClients int
 }
 
+type MatchmakerMessage struct {
+	Status Matchmaker
+}
+
+type Server struct {
+	Url string
+}
+
+type ServerInfoMessage struct {
+	Url Server
+}
+
 func NewMatchmaker(target int) *Matchmaker {
-	availableServers := []string{"localhost:10000"}
-	busyServers := []string{}
+	availableServers := []Server{Server{"localhost:10000"}}
+	busyServers := []Server{}
 	return &Matchmaker{nil, nil, availableServers, busyServers, 0, target}
 }
 
@@ -26,7 +38,7 @@ func (m *Matchmaker) PlayerJoined (conn *websocket.Conn) {
 	status := make(chan int)
 	m.statusChannels = append(m.statusChannels, status)
 
-	gameserver := make(chan string)
+	gameserver := make(chan Server)
 	m.gameserverChannel = append(m.gameserverChannel, gameserver)
 
 	go m.syncMatchmaker(conn, status, gameserver)
@@ -36,23 +48,31 @@ func (m *Matchmaker) PlayerJoined (conn *websocket.Conn) {
 	}
 
 	if m.CurrentClients == m.TargetClients {
+
+		selectedServer := m.availableServers[0]
+
+		m.availableServers = m.availableServers[1:]
+		m.busyServers = append(m.busyServers, selectedServer)
+
+		// TODO no available game servers. Spin up some more game servers. Find the new ones, dispatch a game
+
 		for _, gameChannel := range m.gameserverChannel {
-			gameChannel <- "gameserverurl"
+			gameChannel <- selectedServer
 		}
 
 		//TODO cleanup here
 	}
 }
 
-func (m *Matchmaker) syncMatchmaker(conn *websocket.Conn, status chan int, gameserver chan string) {
+func (m *Matchmaker) syncMatchmaker(conn *websocket.Conn, status chan int, gameserver chan Server) {
 	for {
 		select {
 			case <- status:
-				if err := conn.WriteJSON(m); err != nil {
+				if err := conn.WriteJSON(MatchmakerMessage{*m}); err != nil {
 					fmt.Println(err)
 				}
-			case url := <-gameserver:
-				if err := conn.WriteJSON(url); err != nil {
+			case gs := <-gameserver:
+				if err := conn.WriteJSON(ServerInfoMessage{gs}); err != nil {
 					fmt.Println(err)
 				}
 				conn.Close()

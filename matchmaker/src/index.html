@@ -14,24 +14,41 @@
                 $("#container").append("Your browser does not support WebSockets");
                 return;
             } else {
-                ws = initWS();
+                ws = joinMatchmakingQueue();
             }
 
-            function initWS() {
-                var socket = new WebSocket("ws://" + location.host + "/ws"),
-                    container = $("#container")
+            function joinMatchmakingQueue() {
+                var socket = new WebSocket("ws://" + location.host + "/ws");
+
+				container = $("#container");
+
                 socket.onopen = function() {
                     container.append("<p>Socket is open</p>");
                 };
+
                 socket.onmessage = function (e) {
-                    container.append("<p> Got some shit:" + e.data + "</p>");
-                }
-                socket.onclose = function () {
-                    container.append("<p>Socket closed</p>");
-                }
+					var data = JSON.parse(e.data);
+					if (data['Url']) {
+						joinGameServer(data['Url']);
+					}
+
+					if (data['Status']) {
+						updateStatus(data['Status']);
+					}
+                };
+
+                socket.onclose = function () {};
 
                 return socket;
             }
+
+			function updateStatus(s) {
+				
+			}
+
+			function joinGameServer(gs) {
+				var socket = new WebSocket("ws://" 
+			}
 
 //            $("#sendBtn").click(function (e) {
 //                e.preventDefault();
