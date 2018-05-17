@@ -13,7 +13,7 @@ func main() {
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	content, err := ioutil.ReadFile("index.html")
+	content, err := ioutil.ReadFile("frontend/index.html")
 	if err != nil {
 		fmt.Println("Could not open file.", err)
 	}
