@@ -1,6 +1,5 @@
 <html>
 <head>
-    <title>WebSocket demo</title>
 </head>
 <body>
     <div id="container"></div>
@@ -18,7 +17,7 @@
             }
 
             function joinMatchmakingQueue() {
-                var socket = new WebSocket("ws://" + location.host + "/ws");
+                var socket = new WebSocket("ws://127.0.0.1:8001/ws");
 
 				container = $("#container");
 
@@ -47,7 +46,14 @@
 			}
 
 			function joinGameServer(gs) {
-				var socket = new WebSocket("ws://" 
+				var socket = new WebSocket("ws://" + gs.Url);
+
+				socket.onopen = function() {};
+
+				socket.onmessage = function() {};
+
+				socket.onclose = function() {};
+			
 			}
 
 //            $("#sendBtn").click(function (e) {

@@ -1,54 +1,66 @@
-<!DOCTYPE html>
 <html>
-	<head>
-		<title>Sneks</title>
-	</head>
-	<body>
-		<div>
-			<form>
-				<label for="message">Message</label>
-				<input type="text" id="message" placeholder="msg"/><br/>
-				<button type="button" id="btnSend">Send</button>
-				<button type="button" id="btnCloseWs">Close Socket</button>
-			</form>
-		</div>
-		<div id="container"></div>
+<head>
+</head>
+<body>
+    <div id="container"></div>
 
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script type="text/javascript">
-			$(function () {
-				var ws;
-				if (window.WebSocket === undefined) {
-					$("#container").append("Your browser does not support WebSockets");
-					return;
-				} else {
-					ws = initWS();
-				}
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var ws;
 
-				function initWS() {
-					var socket = new WebSocket("ws://localhost:8080/ws");
-					container = $("#container")
-					socket.onopen = function() {
-						container.append("<p>Socket is open</p>");
-					};
-					socket.onmessage = function (e) {
-						container.append("<p> Received message:" + e.data + "</p>");
+            if (window.WebSocket === undefined) {
+                $("#container").append("Your browser does not support WebSockets");
+                return;
+            } else {
+                ws = joinMatchmakingQueue();
+            }
+
+            function joinMatchmakingQueue() {
+                var socket = new WebSocket("ws://127.0.0.1:8001/ws");
+
+				container = $("#container");
+
+                socket.onopen = function() {
+                    container.append("<p>Socket is open</p>");
+                };
+
+                socket.onmessage = function (e) {
+					var data = JSON.parse(e.data);
+					if (data['Url']) {
+						joinGameServer(data['Url']);
 					}
-					socket.onclose = function () {
-						container.append("<p>Socket closed</p>");
-					}
-					return socket;
-				}
 
-				$("#btnSend").click(function (e) {
-					e.preventDefault();
-					ws.send(JSON.stringify({ SomeData: $("#message").val() }));
-				});
-				$("#btnCloseWs").click(function (e) {
-					e.preventDefault();
-					ws.close();
-				});
-			});
-		</script>
-	</body>
+					if (data['Status']) {
+						updateStatus(data['Status']);
+					}
+                };
+
+                socket.onclose = function () {};
+
+                return socket;
+            }
+
+			function updateStatus(s) {
+				
+			}
+
+			function joinGameServer(gs) {
+				var socket = new WebSocket("ws://" + gs.Url);
+
+				socket.onopen = function() {};
+
+				socket.onmessage = function() {};
+
+				socket.onclose = function() {};
+			
+			}
+
+//            $("#sendBtn").click(function (e) {
+//                e.preventDefault();
+//                ws.send(JSON.stringify({ Num: parseInt($("#numberfield").val()) }));
+//            });
+        });
+    </script>
+</body>
 </html>
