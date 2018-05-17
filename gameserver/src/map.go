@@ -28,7 +28,7 @@ type MapEvent interface {
 }
 
 func NewMap(players int) *Map {
-  newMap := &Map{}
+	newMap := &Map{}
 	newMap.Tiles = make([][]Tile, players*10)
 
 	for i := range newMap.Tiles {
@@ -59,7 +59,7 @@ func (m *Map) SpawnNewPlayerAt(player *Player, col int, row int) (int, int) {
 	m.Players[player] = NewSnake(col, row, m, player)
 	player.Snake = m.Players[player]
 
-	// TODO is this return needed? 
+	// TODO is this return needed?
 	// Possibly, could be used to indicate a different location if this one is occupied
 	return col, row
 }

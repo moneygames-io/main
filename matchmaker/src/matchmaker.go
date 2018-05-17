@@ -1,17 +1,17 @@
 package main
 
-import(
+import (
 	"fmt"
 	"github.com/gorilla/websocket"
 )
 
 type Matchmaker struct {
-	statusChannels []chan int
+	statusChannels    []chan int
 	gameserverChannel []chan Server
-	availableServers []Server
-	busyServers []Server
-	CurrentClients int
-	TargetClients int
+	availableServers  []Server
+	busyServers       []Server
+	CurrentClients    int
+	TargetClients     int
 }
 
 type MatchmakerMessage struct {
@@ -32,7 +32,7 @@ func NewMatchmaker(target int) *Matchmaker {
 	return &Matchmaker{nil, nil, availableServers, busyServers, 0, target}
 }
 
-func (m *Matchmaker) PlayerJoined (conn *websocket.Conn) {
+func (m *Matchmaker) PlayerJoined(conn *websocket.Conn) {
 	m.CurrentClients++
 
 	status := make(chan int)
@@ -67,15 +67,15 @@ func (m *Matchmaker) PlayerJoined (conn *websocket.Conn) {
 func (m *Matchmaker) syncMatchmaker(conn *websocket.Conn, status chan int, gameserver chan Server) {
 	for {
 		select {
-			case <- status:
-				if err := conn.WriteJSON(MatchmakerMessage{*m}); err != nil {
-					fmt.Println(err)
-				}
-			case gs := <-gameserver:
-				if err := conn.WriteJSON(ServerInfoMessage{gs}); err != nil {
-					fmt.Println(err)
-				}
-				conn.Close()
+		case <-status:
+			if err := conn.WriteJSON(MatchmakerMessage{*m}); err != nil {
+				fmt.Println(err)
+			}
+		case gs := <-gameserver:
+			if err := conn.WriteJSON(ServerInfoMessage{gs}); err != nil {
+				fmt.Println(err)
+			}
+			conn.Close()
 		}
 	}
 }
