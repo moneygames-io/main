@@ -3,8 +3,7 @@ package main
 type Player struct {
 	Name             string
 	CurrentDirection int
-	CurrentZoomLevel int
 	CurrentSprint    bool
-	WalletAddress    string
+	Token		     string
 	Snake            *Snake
 }
