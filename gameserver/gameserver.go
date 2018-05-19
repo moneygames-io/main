@@ -7,15 +7,15 @@ import (
 
 type GameServer struct {
     Users map[*Client]*Player
+	World *Map
 }
 
 var gameserver *GameServer
 
 func main() {
-    gameserver = &GameServer{make(map[*Client]*Player)}
+    gameserver = &GameServer{make(map[*Client]*Player), NewMap(2)}
 
 	http.HandleFunc("/ws", wsHandler)
-
 	panic(http.ListenAndServe(":10000", nil))
 }
 
@@ -25,10 +25,27 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Could not open websocket connection", http.StatusBadRequest)
 	}
 
-	gameserver.PlayerJoined(conn)
+	gameserver.PlayerJoined(conn) // Should / can this be asyncronous
 }
 
 func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
-	// https://blog.golang.org/json-and-go
-	// Type switches exactly what you need
+	var message &RegisterMessage{}
+
+	error := conn.readJSON(message)
+
+	if error != nil || !validateToken(message.Token) {
+		conn.Close()
+	}
+
+	// TODO token consumed
+
+	c := NewClient(message, conn)
+	c.Player = &Player{}
+	gameserver.World.SpawnNewPlayer(c.Player)
+
+	gameserver.Users[c] = c.Player
+}
+
+func validateToken(token string) bool {
+	return true
 }

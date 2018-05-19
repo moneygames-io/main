@@ -14,6 +14,8 @@ type Matchmaker struct {
 	TargetClients     int
 }
 
+// https://stackoverflow.com/questions/7893776/the-most-accurate-way-to-check-js-objects-type 
+// This and type switches are the type of things you need to be dealing with, not these nested messages
 type MatchmakerMessage struct {
 	Status Matchmaker
 }
