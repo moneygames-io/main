@@ -14,9 +14,22 @@ var gameserver *GameServer
 
 func main() {
     gameserver = &GameServer{make(map[*Client]*Player), NewMap(2)}
+	go gameserver.MapUpdater()
 
 	http.HandleFunc("/ws", wsHandler)
 	panic(http.ListenAndServe(":10000", nil))
+}
+
+func (gs *GameServer) MapUpdater() {
+	// TODO Wait to start doing this channel? After the last connction is established?
+	for {
+		gs.World.Update()
+		view := gs.World.render()
+
+		for k := range gs.Users {
+			k.Conn.writeJSON(k)
+		}
+	}
 }
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
@@ -41,9 +54,10 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 
 	c := NewClient(message, conn)
 	c.Player = &Player{}
-	gameserver.World.SpawnNewPlayer(c.Player)
+	gs.World.SpawnNewPlayer(c.Player)
 
-	gameserver.Users[c] = c.Player
+	gs.Users[c] = c.Player
+	go c.Player.collectInput(conn)
 }
 
 func validateToken(token string) bool {
