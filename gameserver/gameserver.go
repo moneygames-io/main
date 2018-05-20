@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gorilla/websocket"
 	"net/http"
+	"time"
 )
 
 type GameServer struct {
@@ -23,11 +24,15 @@ func main() {
 func (gs *GameServer) MapUpdater() {
 	// TODO Wait to start doing this channel? After the last connction is established?
 	for {
-		gs.World.Update()
-		view := gs.World.render()
+		if (len(gs.Users) > 1) {
+			gs.World.Update()
+			view := gs.World.render()
 
-		for k := range gs.Users {
-			k.Conn.writeJSON(k)
+			for k := range gs.Users {
+				k.Conn.WriteJSON(view)
+			}
+
+			time.Sleep(100 * time.Millisecond)
 		}
 	}
 }
@@ -42,9 +47,9 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
-	var message &RegisterMessage{}
+	message := &RegisterMessage{}
 
-	error := conn.readJSON(message)
+	error := conn.ReadJSON(message)
 
 	if error != nil || !validateToken(message.Token) {
 		conn.Close()

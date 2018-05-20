@@ -15,7 +15,7 @@ type Player struct {
 func (p *Player) collectInput(conn *websocket.Conn) {
 	msg := &ClientUpdateMessage{}
 	for {
-		conn.readJSON(msg)
+		conn.ReadJSON(msg)
 		p.CurrentDirection = msg.CurrentDirection
 		p.CurrentSprint = msg.CurrentSprint
 		p.Client.CurrentZoomLevel = msg.CurrentZoomLevel
