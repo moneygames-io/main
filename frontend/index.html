@@ -2,65 +2,71 @@
 <head>
 </head>
 <body>
-    <div id="container"></div>
+  <div id="container"></div>
 
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            var ws;
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      var ws;
 
-            if (window.WebSocket === undefined) {
-                $("#container").append("Your browser does not support WebSockets");
-                return;
-            } else {
-                ws = joinMatchmakingQueue();
-            }
+      if (window.WebSocket === undefined) {
+        $("#container").append("Your browser does not support WebSockets");
+        return;
+      } else {
+        ws = joinMatchmakingQueue();
+      }
 
-            function joinMatchmakingQueue() {
-                var socket = new WebSocket("ws://127.0.0.1:8001/ws");
+      function joinMatchmakingQueue() {
+        var socket = new WebSocket("ws://127.0.0.1:8001/ws");
 
-				container = $("#container");
+        container = $("#container");
 
-                socket.onopen = function() {
-                    container.append("<p>Socket is open</p>");
-                };
+        socket.onopen = function() {
+          console.log("first socket opened");
+        };
 
-                socket.onmessage = function (e) {
-					var data = JSON.parse(e.data);
-					if (data['Url']) {
-						joinGameServer(data['Url']);
-					}
+        socket.onmessage = function (e) {
+          var data = JSON.parse(e.data);
+          if (data['Url']) {
+            joinGameServer(data['Url']);
+          }
 
-					if (data['Status']) {
-						updateStatus(data['Status']);
-					}
-                };
+          if (data['Status']) {
+            updateStatus(data['Status']);
+          }
+        };
 
-                socket.onclose = function () {};
+        socket.onclose = function () {};
 
-                return socket;
-            }
+        return socket;
+      }
 
-			function updateStatus(s) {
-				
-			}
+      function updateStatus(s) {
+        
+      }
 
-			function joinGameServer(gs) {
-				var socket = new WebSocket("ws://" + gs.Url);
+      function joinGameServer(gs) {
+        var socket = new WebSocket("ws://" + gs.Url + "/ws");
 
-				socket.onopen = function() {};
+        socket.onopen = function() {
+          console.log("second socet opened");
+        };
 
-				socket.onmessage = function() {};
+        socket.onmessage = function(e) {
+          console.log(e.data);
+        };
 
-				socket.onclose = function() {};
-			
-			}
+        socket.onclose = function() {
+          console.log("second socketclosed");
+        };
+      
+      }
 
-//            $("#sendBtn").click(function (e) {
-//                e.preventDefault();
-//                ws.send(JSON.stringify({ Num: parseInt($("#numberfield").val()) }));
-//            });
-        });
-    </script>
+//      $("#sendBtn").click(function (e) {
+//        e.preventDefault();
+//        ws.send(JSON.stringify({ Num: parseInt($("#numberfield").val()) }));
+//      });
+    });
+  </script>
 </body>
 </html>

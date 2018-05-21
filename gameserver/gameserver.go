@@ -21,22 +21,6 @@ func main() {
 	panic(http.ListenAndServe(":10000", nil))
 }
 
-func (gs *GameServer) MapUpdater() {
-	// TODO Wait to start doing this channel? After the last connction is established?
-	for {
-		if (len(gs.Users) > 1) {
-			gs.World.Update()
-			view := gs.World.render()
-
-			for k := range gs.Users {
-				k.Conn.WriteJSON(view)
-			}
-
-			time.Sleep(100 * time.Millisecond)
-		}
-	}
-}
-
 func wsHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := websocket.Upgrade(w, r, w.Header(), 1024, 1024)
 	if err != nil {
@@ -47,6 +31,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
+	fmt.Println("Player Joined")
 	message := &RegisterMessage{}
 
 	error := conn.ReadJSON(message)
@@ -67,4 +52,20 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 
 func validateToken(token string) bool {
 	return true
+}
+
+func (gs *GameServer) MapUpdater() {
+	// TODO Wait to start doing this channel? After the last connction is established?
+	for {
+		if (len(gs.Users) > 1) {
+			gs.World.Update()
+			view := gs.World.render()
+
+			for k := range gs.Users {
+				k.Conn.WriteJSON(view)
+			}
+
+			time.Sleep(100 * time.Millisecond)
+		}
+	}
 }
