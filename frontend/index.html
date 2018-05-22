@@ -49,7 +49,11 @@
         var socket = new WebSocket("ws://" + gs.Url + "/ws");
 
         socket.onopen = function() {
-          console.log("second socet opened");
+          socket.send(JSON.stringify(
+            {
+              'Name': 
+            }
+          ));
         };
 
         socket.onmessage = function(e) {
@@ -70,3 +74,16 @@
   </script>
 </body>
 </html>
+
+/**
+ * TODO:
+ *  Break this file up into smaller components
+ *  Minify at some point?
+ *  The frontend will send a JSON array of Square objects as well as stats
+ *  The square objects will simply have a color
+ *  Stats can be:
+ *      Leaderboard
+ *      Current claimed / unclaimed money
+ *      Your current worth / length
+ *      These will be rendered as they appear
+ */
