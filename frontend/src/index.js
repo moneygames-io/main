@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import Game from './game.js';
 
 function canvas() {
   var canv = document.createElement('canvas');
@@ -7,11 +7,17 @@ function canvas() {
   return canv;
 }
 
+function testImport() {
+	var test = document.createElement('p');
+	var a = new Game();
+	test.innerHTML = a.render();
+	return test;
+}
+
 function setupCanvas(c) {
 	c.width = document.body.clientWidth;
 	c.heigh = document.body.clientHeight;
-	var link
 }
 
 
-document.body.appendChild(canvas());
+document.body.appendChild(testImport());
