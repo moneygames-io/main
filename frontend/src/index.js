@@ -1,11 +1,17 @@
 import _ from 'lodash';
 
-function component() {
-  var element = document.createElement('div');
+function canvas() {
+  var canv = document.createElement('canvas');
+  setupCanvas(canv);
 
-  element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-
-  return element;
+  return canv;
 }
 
-document.body.appendChild(component());
+function setupCanvas(c) {
+	c.width = document.body.clientWidth;
+	c.heigh = document.body.clientHeight;
+	var link
+}
+
+
+document.body.appendChild(canvas());
