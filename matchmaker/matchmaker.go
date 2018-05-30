@@ -62,6 +62,7 @@ func (m *Matchmaker) PlayerJoined(conn *websocket.Conn) {
 			gameChannel <- selectedServer
 		}
 
+		m.CurrentClients = 0;
 		//TODO cleanup here
 	}
 }

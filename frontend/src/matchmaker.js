@@ -12,8 +12,8 @@ export default class Matchmaker {
   }
 
   socketOpened() {
-    window.draw = this.render.bind(this);
-    window.requestAnimationFrame(window.draw);
+    window.currentDraw = this.render.bind(this);
+    window.requestAnimationFrame(window.currentDraw);
   }
 
   matchmakingMessage(e) {
@@ -37,13 +37,14 @@ export default class Matchmaker {
   }
   
   render() {
+  	console.log("rendered");
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 	this.ctx.beginPath();
 	this.ctx.lineWidth = 5;
 	this.ctx.strokeStyle = 'rgb(108, 116, 128)';
 	this.ctx.arc(
-		this.ctx.canvas.width / 4, 
-		this.ctx.canvas.height / 4, 
+		this.ctx.canvas.width / 2, 
+		this.ctx.canvas.height / 2, 
 		50, 
 		1.5 * Math.PI, 
 		this.progress * 2 * Math.PI + 1.5 * Math.PI
