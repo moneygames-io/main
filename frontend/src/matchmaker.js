@@ -1,4 +1,4 @@
-class Matchmaker {
+export default class Matchmaker {
   constructor(matchmakingURL, canvasContext) {
     this.url = matchmakingURL;
     this.ctx = canvasContext;
@@ -11,9 +11,8 @@ class Matchmaker {
   }
 
   socketOpened() {
-	this.ctx.beginPath();
-	this.ctx.arc(95,50,40,0,Math.PI);
-	this.ctx.stroke();
+    window.draw = this.render.bind(this);
+    window.requestAnimationFrame(window.draw);
   }
 
   matchmakingMessage(e) {
@@ -34,6 +33,13 @@ class Matchmaker {
   joinGameServer(gs) {
     console.log(gs);
   }
+  
+  render() {
+    console.log('render called');
+    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+	this.ctx.beginPath();
+	this.ctx.arc(this.ctx.canvas.width / 2, this.ctx.canvas.height / 2, 40,0,Math.PI);
+	this.ctx.stroke();
+    window.requestAnimationFrame(this.render.bind(this));
+  }
 }
-
-module.exports = Matchmaker;
