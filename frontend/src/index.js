@@ -21,7 +21,12 @@ function createCanvas() {
   var canv = document.createElement('canvas');
   canv.width = window.innerWidth;
   canv.height = window.innerHeight;
+  canv.style.width = canv.width / 2;
+  canv.style.height = canv.height / 2;
+  canv.getContext('2d').scale(2,2)
   return canv;
 }
 
 main();
+
+// Leave off here: https://medium.com/wdstack/fixing-html5-2d-canvas-blur-8ebe27db07da

@@ -2,6 +2,7 @@ export default class Matchmaker {
   constructor(matchmakingURL, canvasContext) {
     this.url = matchmakingURL;
     this.ctx = canvasContext;
+	this.progress = 0;
   }
 
   joinQueue() {
@@ -27,7 +28,8 @@ export default class Matchmaker {
   }
 
   updateStatus(s) {
-    console.log(s);
+  	this.progress = s.CurrentClients / s.TargetClients;
+	this.render();
   }
 
   joinGameServer(gs) {
@@ -35,11 +37,17 @@ export default class Matchmaker {
   }
   
   render() {
-    console.log('render called');
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 	this.ctx.beginPath();
-	this.ctx.arc(this.ctx.canvas.width / 2, this.ctx.canvas.height / 2, 40,0,Math.PI);
+	this.ctx.lineWidth = 5;
+	this.ctx.strokeStyle = 'rgb(108, 116, 128)';
+	this.ctx.arc(
+		this.ctx.canvas.width / 4, 
+		this.ctx.canvas.height / 4, 
+		50, 
+		1.5 * Math.PI, 
+		this.progress * 2 * Math.PI + 1.5 * Math.PI
+	);
 	this.ctx.stroke();
-    window.requestAnimationFrame(this.render.bind(this));
   }
 }
