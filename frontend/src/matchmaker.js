@@ -1,7 +1,8 @@
 export default class Matchmaker {
-  constructor(matchmakingURL, canvasContext) {
+  constructor(matchmakingURL, canvasContext, gameserverCallback) {
     this.url = matchmakingURL;
     this.ctx = canvasContext;
+	this.gameserverCallback = gameserverCallback;
 	this.progress = 0;
   }
 
@@ -19,7 +20,8 @@ export default class Matchmaker {
   matchmakingMessage(e) {
     var data = JSON.parse(e.data);
     if (data['Url']) {
-      this.joinGameServer(data['Url']);
+		var gs = new Gameserver(this.ctx, data['Status']);
+		this.gameserverCallback(gs);
     }
 
     if (data['Status']) {
@@ -31,21 +33,17 @@ export default class Matchmaker {
   	this.progress = s.CurrentClients / s.TargetClients;
 	this.render();
   }
-
-  joinGameServer(gs) {
-    console.log(gs);
-  }
   
   render() {
   	console.log("rendered");
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 	this.ctx.beginPath();
-	this.ctx.lineWidth = 5;
+	this.ctx.lineWidth = 3;
 	this.ctx.strokeStyle = 'rgb(108, 116, 128)';
 	this.ctx.arc(
 		this.ctx.canvas.width / 2, 
 		this.ctx.canvas.height / 2, 
-		50, 
+		100, 
 		1.5 * Math.PI, 
 		this.progress * 2 * Math.PI + 1.5 * Math.PI
 	);

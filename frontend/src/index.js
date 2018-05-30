@@ -1,4 +1,5 @@
-import Matchmaker from './matchmaker.js';
+import Matchmaker from './matchmaker.js'
+import Gameserver from './gameserver.js'
 
 function main() {
   var canvas = createCanvas();
@@ -6,15 +7,21 @@ function main() {
   fixDPI();
 
   var context = canvas.getContext('2d');
-  window.matchmaker = new Matchmaker("ws://127.0.0.1:8001/ws", context);
+  var matchmaker = new Matchmaker("ws://127.0.0.1:8001/ws", context, gameserverReady.bind(this));
+  var gameserver = new Gameserver(context, undefined);
   window.requestAnimationFrame(render);
 
   matchmaker.joinQueue();
+  window.currentView = matchmaker;
+}
+
+function gameserverReady(gameserver) {
+	console.log(gameserver);
 }
 
 function render() {
   fixDPI();
-  window.matchmaker.render();
+  window.currentView.render();
   window.requestAnimationFrame(render);
 }
 
