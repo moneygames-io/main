@@ -1,32 +1,45 @@
 import Matchmaker from './matchmaker.js';
 
-window.draw = function() {console.log("draw");}
-
 function main() {
   var canvas = createCanvas();
   document.body.appendChild(canvas);
-  window.onresize = function() {
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	window.draw();
-  }
+  fixDPI();
 
   var context = canvas.getContext('2d');
-  var matchmaker = new Matchmaker("ws://127.0.0.1:8001/ws", context);
+  window.matchmaker = new Matchmaker("ws://127.0.0.1:8001/ws", context);
+  window.requestAnimationFrame(render);
 
   matchmaker.joinQueue();
 }
 
+function render() {
+  fixDPI();
+  window.matchmaker.render();
+  window.requestAnimationFrame(render);
+}
+
 function createCanvas() {
   var canv = document.createElement('canvas');
-  canv.width = window.innerWidth;
-  canv.height = window.innerHeight;
-  canv.style.width = canv.width / 2;
-  canv.style.height = canv.height / 2;
-  canv.getContext('2d').scale(2,2)
+  canv.id = "canv";
+
+  window.addEventListener('resize', fixDPI, false);
   return canv;
 }
 
-main();
+function fixDPI() {
+  var canv = document.getElementById('canv');
+  var dpi = window.devicePixelRatio;
+  let style = {
+    height() {
+      return +getComputedStyle(canv).getPropertyValue('height').slice(0,-2);
+    },
+    width() {
+      return +getComputedStyle(canv).getPropertyValue('width').slice(0,-2);
+    }
+  }
 
-// Leave off here: https://medium.com/wdstack/fixing-html5-2d-canvas-blur-8ebe27db07da
+  canv.setAttribute('width', style.width() * dpi);
+  canv.setAttribute('height', style.height() * dpi);
+}
+
+main();

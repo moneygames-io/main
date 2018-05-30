@@ -8,7 +8,7 @@ import (
 var matchmaker *Matchmaker
 
 func main() {
-	matchmaker = NewMatchmaker(2)
+	matchmaker = NewMatchmaker(5)
 
 	http.HandleFunc("/ws", wsHandler)
 
