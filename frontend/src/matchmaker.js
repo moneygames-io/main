@@ -13,8 +13,7 @@ export default class Matchmaker {
   }
 
   socketOpened() {
-    window.currentDraw = this.render.bind(this);
-    window.requestAnimationFrame(window.currentDraw);
+    window.requestAnimationFrame(this.render.bind(this));
   }
 
   matchmakingMessage(e) {

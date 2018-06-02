@@ -1,7 +1,9 @@
 export default class Gameserver {
-	constructor(ctx, gs) {
+	constructor(ctx, gs, fixDPI) {
       this.ctx = ctx;
       this.gs = gs;
+      this.fixDPI = fixDPI;
+      this.offset = 20;
 	}
 
     connect() {
@@ -19,10 +21,29 @@ export default class Gameserver {
     }
 
     mapReceived(e) {
-      console.log(e);
+      this.colors = e.data;
+      window.requestAnimationFrame(this.render.bind(this));
+    }
+
+    drawColors() {
+      for (let r = 0; r < this.colors.length; r++) {
+        for (let c = 0; c < this.colors[r].length; c++) {
+          //this.ctx.fillStyle = "#" + this.colors[r][c].toString(16);
+          this.ctx.fillStyle = "#000000";
+          // TODO the lengths might be wrong here
+          this.ctx.fillRect(
+            this.offset + (this.ctx.canvas.width * r) / this.colors.length,
+            this.offset + (this.ctx.canvas.height * c) / this.colors[r].length,
+            ((this.ctx.canvas.width * (c + 1)) / this.colors.length) - this.offset,
+            ((this.ctx.canvas.height * (r + 1)) / this.colors.length) - this.offset
+          );
+        }
+      }
     }
 
     render() {
+      this.fixDPI();
       this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+      this.drawColors();
     }
 }

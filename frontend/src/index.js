@@ -12,22 +12,19 @@ class Index {
 	  window.requestAnimationFrame(this.render.bind(this));
 
 	  matchmaker.joinQueue();
-	  window.currentView = matchmaker;
+	  this.currentView = matchmaker;
 	}
 
 	gameserverReady(gs) {
-		let gameserver = new Gameserver(this.ctx, gs);
+		let gameserver = new Gameserver(this.context, gs, this.fixDPI.bind(this));
 		gameserver.connect();
 	}
 
 	/**
 	 * TODO should anyone else call render? 
-	 * TODO I think everyone should handle their own rendering and we should be renamed to something like "clear" that gets called at the start of every animation frame. (can remove request then) and not keep track of window.currentView
+	 * TODO I think everyone should handle their own rendering and we should be renamed to something like "clear" that gets called at the start of every animation frame. (can remove request then) and not keep track of this.currentView
 	 */
 	render() {
-	  this.fixDPI();
-	  window.currentView.render();
-	  window.requestAnimationFrame(this.render.bind(this));
 	}
 
 	createCanvas() {
@@ -46,6 +43,7 @@ class Index {
 	  return +getComputedStyle(this.canvas).getPropertyValue('width').slice(0,-2);
 	}
 
+	// TODO move to superclass of matchmaker and gameserver
 	fixDPI() {
 	  let dpi = window.devicePixelRatio;
 
