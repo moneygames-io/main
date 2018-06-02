@@ -1,21 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gorilla/websocket"
 	"net/http"
 	"time"
-	"fmt"
 )
 
 type GameServer struct {
-    Users map[*Client]*Player
+	Users map[*Client]*Player
 	World *Map
 }
 
 var gameserver *GameServer
 
 func main() {
-    gameserver = &GameServer{make(map[*Client]*Player), NewMap(2)}
+	gameserver = &GameServer{make(map[*Client]*Player), NewMap(2)}
 	go gameserver.MapUpdater()
 
 	http.HandleFunc("/ws", wsHandler)
@@ -58,7 +58,7 @@ func validateToken(token string) bool {
 func (gs *GameServer) MapUpdater() {
 	// TODO Wait to start doing this channel? After the last connction is established?
 	for {
-		if (len(gs.Users) > 1) {
+		if len(gs.Users) > 1 {
 			// TODO somewhere we are going to a nil snake location and calling move on that
 			// gs.World.Update()
 			view := gs.World.render()
@@ -66,7 +66,7 @@ func (gs *GameServer) MapUpdater() {
 			for k := range gs.Users {
 				fmt.Println(view)
 				fmt.Println(k)
-				// TODO this is too large? 
+				// TODO this is too large?
 				k.Conn.WriteJSON(&view)
 			}
 

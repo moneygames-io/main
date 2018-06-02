@@ -16,6 +16,7 @@ type Map struct {
 	Tiles   [][]Tile
 	Players map[*Player]*Snake
 	Losers  map[*Player]*Snake
+	Colors  map[*Snake]uint32
 }
 
 type MapEvent interface {
@@ -37,6 +38,7 @@ func NewMap(players int) *Map {
 
 	newMap.Players = make(map[*Player]*Snake)
 	newMap.Losers = make(map[*Player]*Snake)
+	newMap.Colors = make(map[*Snake]uint32)
 	return newMap
 }
 
@@ -120,9 +122,39 @@ func (m *Map) Update() {
 		}
 	}
 }
+func (m *Map) getColor(tile *Tile) uint32 {
+	if tile.Food != nil {
+		return 0x00FF00
+	}
 
-func (m *Map) render() [][]Tile {
-	return m.Tiles
+	if tile.Snake == nil {
+		return 0xFFFFFF
+	}
+
+	if val, ok := m.Colors[tile.Snake]; ok {
+		return val
+	}
+
+	m.Colors[tile.Snake] = rand.Uint32()
+	return m.Colors[tile.Snake]
+}
+
+// TODO test this function
+func (m *Map) render() [][]uint32 {
+	colors := make([][]uint32, len(m.Tiles))
+
+	for i := range m.Tiles {
+		colors[i] = make([]uint32, len(m.Tiles[i]))
+	}
+
+	for r := range m.Tiles {
+		for c := range m.Tiles[r] {
+			colors[r][c] = m.getColor(&m.Tiles[r][c])
+		}
+	}
+
+	return colors
 }
 
 // TODO add get number of snakes/ get number of foods
+// TODO get size
