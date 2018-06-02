@@ -11,6 +11,11 @@ export default class Gameserver {
     }
 
     socketOpened() {
+      console.log("gameserver opened");
+      this.socket.send(JSON.stringify({
+        'Name': 'Parth',
+        'Token': 'token'
+      }));
     }
 
     mapReceived(e) {

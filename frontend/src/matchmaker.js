@@ -34,7 +34,6 @@ export default class Matchmaker {
   }
   
   render() {
-  	console.log("rendered");
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 	this.ctx.beginPath();
 	this.ctx.lineWidth = 3;

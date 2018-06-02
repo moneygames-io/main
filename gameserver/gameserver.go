@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/websocket"
 	"net/http"
 	"time"
+	"fmt"
 )
 
 type GameServer struct {
@@ -58,11 +59,15 @@ func (gs *GameServer) MapUpdater() {
 	// TODO Wait to start doing this channel? After the last connction is established?
 	for {
 		if (len(gs.Users) > 1) {
-			gs.World.Update()
+			// TODO somewhere we are going to a nil snake location and calling move on that
+			// gs.World.Update()
 			view := gs.World.render()
 
 			for k := range gs.Users {
-				k.Conn.WriteJSON(view)
+				fmt.Println(view)
+				fmt.Println(k)
+				// TODO this is too large? 
+				k.Conn.WriteJSON(&view)
 			}
 
 			time.Sleep(100 * time.Millisecond)

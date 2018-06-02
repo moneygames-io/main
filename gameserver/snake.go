@@ -29,7 +29,7 @@ func NewSnake(x int, y int, events MapEvent, player ...*Player) *Snake {
 }
 
 func (snake *Snake) Move(direction int) {
-	if snake.Length == 1 || math.Abs(float64(direction-snake.CurrentDirection)) != 2 {
+	if snake.Length == 1 || math.Abs(float64(direction-(snake.CurrentDirection))) != 2 {
 		snake.CurrentDirection = direction
 	}
 	status := snake.GrowHead()
