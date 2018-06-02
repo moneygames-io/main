@@ -44,6 +44,7 @@ class Index {
 	}
 
 	// TODO move to superclass of matchmaker and gameserver
+	// TODO resize actually isn't working
 	fixDPI() {
 	  let dpi = window.devicePixelRatio;
 
