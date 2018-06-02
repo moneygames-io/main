@@ -18,10 +18,9 @@ export default class Matchmaker {
   }
 
   matchmakingMessage(e) {
-    var data = JSON.parse(e.data);
+    let data = JSON.parse(e.data);
     if (data['Url']) {
-		var gs = new Gameserver(this.ctx, data['Status']);
-		this.gameserverCallback(gs);
+		this.gameserverCallback(data['Url']);
     }
 
     if (data['Status']) {

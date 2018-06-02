@@ -1,52 +1,57 @@
 import Matchmaker from './matchmaker.js'
 import Gameserver from './gameserver.js'
 
-function main() {
-  var canvas = createCanvas();
-  document.body.appendChild(canvas);
-  fixDPI();
+class Index {
+	constructor() {
+	  this.canvas = this.createCanvas();
+	  document.body.appendChild(this.canvas);
+	  this.fixDPI();
 
-  var context = canvas.getContext('2d');
-  var matchmaker = new Matchmaker("ws://127.0.0.1:8001/ws", context, gameserverReady.bind(this));
-  var gameserver = new Gameserver(context, undefined);
-  window.requestAnimationFrame(render);
+	  this.context = this.canvas.getContext('2d');
+	  let matchmaker = new Matchmaker("ws://127.0.0.1:8001/ws", this.context, this.gameserverReady.bind(this));
+	  window.requestAnimationFrame(this.render.bind(this));
 
-  matchmaker.joinQueue();
-  window.currentView = matchmaker;
+	  matchmaker.joinQueue();
+	  window.currentView = matchmaker;
+	}
+
+	gameserverReady(gs) {
+		let gameserver = new Gameserver(this.ctx, gs);
+	}
+
+	/**
+	 * TODO should anyone else call render? 
+	 * TODO I think everyone should handle their own rendering and we should be renamed to something like "clear" that gets called at the start of every animation frame. (can remove request then) and not keep track of window.currentView
+	 */
+	render() {
+	  this.fixDPI();
+	  window.currentView.render();
+	  window.requestAnimationFrame(this.render.bind(this));
+	}
+
+	createCanvas() {
+	  let canv = document.createElement('canvas');
+	  canv.id = "canv";
+
+	  window.addEventListener('resize', this.fixDPI, false);
+	  return canv;
+	}
+
+	height() {
+	  return +getComputedStyle(this.canvas).getPropertyValue('height').slice(0,-2);
+	}
+
+	width() {
+	  return +getComputedStyle(this.canvas).getPropertyValue('width').slice(0,-2);
+	}
+
+	fixDPI() {
+	  let dpi = window.devicePixelRatio;
+
+	  this.canvas.setAttribute('width', this.width() * dpi);
+	  this.canvas.setAttribute('height', this.height() * dpi);
+	}
+
 }
 
-function gameserverReady(gameserver) {
-	console.log(gameserver);
-}
-
-function render() {
-  fixDPI();
-  window.currentView.render();
-  window.requestAnimationFrame(render);
-}
-
-function createCanvas() {
-  var canv = document.createElement('canvas');
-  canv.id = "canv";
-
-  window.addEventListener('resize', fixDPI, false);
-  return canv;
-}
-
-function fixDPI() {
-  var canv = document.getElementById('canv');
-  var dpi = window.devicePixelRatio;
-  let style = {
-    height() {
-      return +getComputedStyle(canv).getPropertyValue('height').slice(0,-2);
-    },
-    width() {
-      return +getComputedStyle(canv).getPropertyValue('width').slice(0,-2);
-    }
-  }
-
-  canv.setAttribute('width', style.width() * dpi);
-  canv.setAttribute('height', style.height() * dpi);
-}
-
-main();
+new Index();
