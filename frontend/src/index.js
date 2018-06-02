@@ -17,6 +17,7 @@ class Index {
 
 	gameserverReady(gs) {
 		let gameserver = new Gameserver(this.ctx, gs);
+		gameserver.connect();
 	}
 
 	/**

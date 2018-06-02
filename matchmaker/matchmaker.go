@@ -29,7 +29,7 @@ type ServerInfoMessage struct {
 }
 
 func NewMatchmaker(target int) *Matchmaker {
-	availableServers := []Server{Server{"localhost:10000"}}
+	availableServers := []Server{Server{"ws://127.0.0.1:10000/ws"}}
 	busyServers := []Server{}
 	return &Matchmaker{nil, nil, availableServers, busyServers, 0, target}
 }
