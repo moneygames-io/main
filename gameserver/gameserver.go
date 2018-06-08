@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"net/http"
-	"time"
 )
 
 type GameServer struct {
@@ -68,7 +67,6 @@ func (gs *GameServer) MapUpdater() {
 				k.Conn.WriteJSON(&view)
 			}
 
-			time.Sleep(100 * time.Millisecond)
 			return
 		}
 	}

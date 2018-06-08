@@ -1,3 +1,6 @@
 .idea/*
 coverage.out
 node_modules
+
+gameserver/gameserver
+matchmaker/matchmaker

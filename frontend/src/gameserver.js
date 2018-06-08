@@ -21,23 +21,26 @@ export default class Gameserver {
     }
 
     mapReceived(e) {
-      this.colors = e.data;
+      this.colors = JSON.parse(e.data);
       window.requestAnimationFrame(this.render.bind(this));
     }
 
     drawColors() {
-	  console.log(this.ctx.canvas.width, this.ctx.canvas.height);
       this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
       for (let r = 0; r < this.colors.length; r++) {
         for (let c = 0; c < this.colors[r].length; c++) {
-          //this.ctx.fillStyle = "#" + this.colors[r][c].toString(16);
-          this.ctx.fillStyle = "#000000";
+          this.ctx.fillStyle = "#00ff00"; // + this.colors[r][c].toString(16);
+			console.log(this.colors);
+          //this.ctx.fillStyle = "#000000";
           // TODO the lengths might be wrong here
           this.ctx.fillRect(
-            this.offset + (this.ctx.canvas.width * r) / this.colors.length,
-            this.offset + (this.ctx.canvas.height * c) / this.colors[r].length,
-            ((this.ctx.canvas.width * (c + 1)) / this.colors.length) - this.offset,
-            ((this.ctx.canvas.height * (r + 1)) / this.colors.length) - this.offset
+						(this.ctx.canvas.width / this.colors.length) * r,
+						(this.ctx.canvas.height / this.colors[r].length) * c,
+						10, 10
+            //this.offset + (this.ctx.canvas.width * r) / this.colors.length,
+            //this.offset + (this.ctx.canvas.height * c) / this.colors[r].length,
+            //((this.ctx.canvas.width * (c + 1)) / this.colors.length) - this.offset,
+            //((this.ctx.canvas.height * (r + 1)) / this.colors.length) - this.offset
           );
         }
       }
