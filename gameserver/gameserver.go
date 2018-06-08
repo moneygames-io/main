@@ -64,13 +64,12 @@ func (gs *GameServer) MapUpdater() {
 			view := gs.World.render()
 
 			for k := range gs.Users {
-				fmt.Println(view)
-				fmt.Println(k)
 				// TODO this is too large?
 				k.Conn.WriteJSON(&view)
 			}
 
 			time.Sleep(100 * time.Millisecond)
+			return
 		}
 	}
 }

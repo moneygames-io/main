@@ -26,6 +26,7 @@ export default class Gameserver {
     }
 
     drawColors() {
+	  console.log(this.ctx.canvas.width, this.ctx.canvas.height);
       this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
       for (let r = 0; r < this.colors.length; r++) {
         for (let c = 0; c < this.colors[r].length; c++) {
