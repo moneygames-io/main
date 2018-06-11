@@ -25,8 +25,6 @@ export default class Gameserver {
     }
 
     drawColors() {
-       this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-
 	   let canvasWidth = this.ctx.canvas.width;
 	   let canvasHeight = this.ctx.canvas.height;
 
