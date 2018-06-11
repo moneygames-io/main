@@ -128,7 +128,7 @@ func (m *Map) getColor(tile *Tile) uint32 {
 	}
 
 	if tile.Snake == nil {
-		return 0xFFFFFF
+		return 0xF0F0F0
 	}
 
 	if val, ok := m.Colors[tile.Snake]; ok {

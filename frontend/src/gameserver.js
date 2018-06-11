@@ -37,8 +37,7 @@ export default class Gameserver {
 	   
       for (let r = 0; r < this.colors.length; r++) {
         for (let c = 0; c < this.colors[r].length; c++) {
-          //this.ctx.fillStyle = "#" + this.colors[r][c].toString(16);
-          this.ctx.fillStyle = "#C0C0C0";
+          this.ctx.fillStyle = "#" + this.colors[r][c].toString(16);
           this.ctx.fillRect(
 	    				(gameAreaSize / this.colors.length) * r + this.offset + (gameAreaOffsetW / 2),
 	    				(gameAreaSize / this.colors[r].length) * c + this.offset + (gameAreaOffsetH / 2),
