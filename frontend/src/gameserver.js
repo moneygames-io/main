@@ -29,7 +29,7 @@ export default class Gameserver {
       this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
       for (let r = 0; r < this.colors.length; r++) {
         for (let c = 0; c < this.colors[r].length; c++) {
-          this.ctx.fillStyle = "#00ff00"; // + this.colors[r][c].toString(16);
+          this.ctx.fillStyle = "#" + this.colors[r][c].toString(16);
 			console.log(this.colors);
           //this.ctx.fillStyle = "#000000";
           // TODO the lengths might be wrong here

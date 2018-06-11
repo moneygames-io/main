@@ -31,7 +31,7 @@ class Index {
 	  let canv = document.createElement('canvas');
 	  canv.id = "canv";
 
-	  window.addEventListener('resize', this.fixDPI, false);
+	  window.addEventListener('resize', this.fixDPI.bind(this), false);
 	  return canv;
 	}
 
