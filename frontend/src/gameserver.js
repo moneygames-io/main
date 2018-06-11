@@ -3,7 +3,7 @@ export default class Gameserver {
       this.ctx = ctx;
       this.gs = gs;
       this.fixDPI = fixDPI;
-      this.offset = 20;
+      this.offset = 5;
 	}
 
     connect() {
@@ -13,7 +13,6 @@ export default class Gameserver {
     }
 
     socketOpened() {
-      console.log("gameserver opened");
       this.socket.send(JSON.stringify({
         'Name': 'Parth',
         'Token': 'token'
@@ -26,21 +25,25 @@ export default class Gameserver {
     }
 
     drawColors() {
-      this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+       this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
+	   let canvasWidth = this.ctx.canvas.width;
+	   let canvasHeight = this.ctx.canvas.height;
+
+	   let gameAreaSize = Math.min(canvasWidth, canvasHeight);
+
+	   let gameAreaOffsetW = canvasWidth - gameAreaSize;
+	   let gameAreaOffsetH = canvasHeight - gameAreaSize;
+	   
       for (let r = 0; r < this.colors.length; r++) {
         for (let c = 0; c < this.colors[r].length; c++) {
-          this.ctx.fillStyle = "#" + this.colors[r][c].toString(16);
-			console.log(this.colors);
-          //this.ctx.fillStyle = "#000000";
-          // TODO the lengths might be wrong here
+          //this.ctx.fillStyle = "#" + this.colors[r][c].toString(16);
+          this.ctx.fillStyle = "#C0C0C0";
           this.ctx.fillRect(
-						(this.ctx.canvas.width / this.colors.length) * r,
-						(this.ctx.canvas.height / this.colors[r].length) * c,
-						10, 10
-            //this.offset + (this.ctx.canvas.width * r) / this.colors.length,
-            //this.offset + (this.ctx.canvas.height * c) / this.colors[r].length,
-            //((this.ctx.canvas.width * (c + 1)) / this.colors.length) - this.offset,
-            //((this.ctx.canvas.height * (r + 1)) / this.colors.length) - this.offset
+	    				(gameAreaSize / this.colors.length) * r + this.offset + (gameAreaOffsetW / 2),
+	    				(gameAreaSize / this.colors[r].length) * c + this.offset + (gameAreaOffsetH / 2),
+	    				(gameAreaSize / this.colors.length) - (2*this.offset),
+	    				(gameAreaSize / this.colors[r].length) - (2*this.offset)
           );
         }
       }
