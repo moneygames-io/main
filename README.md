@@ -53,3 +53,37 @@ Clients are responsbile for:
 2. Receiving a map, and showing it
 
 Will likely be a very low amount of information being sent back and forth at a very high rate.
+
+# Build and run instructions
+
+The game is comprised of 3 microservices: a *frontend* that talks to our servers. A *matchmaker* that pools clients and assigns them to gameservers. And *gameserver*s, where actual gameplay is processed. 
+
+Here are platform agnostic instructions to run these services.
+
+Dependencies:
+* Go
+* npm
+
+## frontend
+
+```
+cd frontend
+npm i
+npm run serve
+```
+
+## matchmaker
+
+```
+cd matchmaker
+# TODO fetch deps
+go build && ./matchmaker
+```
+
+## gameserver
+
+```
+cd gameserver
+# TODO fetch deps
+go build && ./gameserver
+```
