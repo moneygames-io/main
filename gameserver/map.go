@@ -110,6 +110,7 @@ func (m *Map) RemoveFood(col int, row int) {
 
 func (m *Map) SnakeRemoved(snake *Snake) {
 	m.Players[snake.Player] = nil
+	delete(m.Players, snake.Player)
 	m.Losers[snake.Player] = snake
 }
 
@@ -140,6 +141,7 @@ func (m *Map) getColor(tile *Tile) uint32 {
 }
 
 // TODO test this function
+// TODO select from existing color palette
 func (m *Map) render() [][]uint32 {
 	colors := make([][]uint32, len(m.Tiles))
 
