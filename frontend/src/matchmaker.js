@@ -1,7 +1,9 @@
-export default class Matchmaker {
-  constructor(matchmakingURL, canvasContext, gameserverCallback) {
+import Canvasobject from './canvasobject.js'
+
+export default class Matchmaker extends Canvasobject {
+  constructor(matchmakingURL, gameserverCallback) {
+  	super();
     this.url = matchmakingURL;
-    this.ctx = canvasContext;
 	this.gameserverCallback = gameserverCallback;
 	this.progress = 0;
   }
@@ -33,17 +35,17 @@ export default class Matchmaker {
   }
   
   render() {
-    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-	this.ctx.beginPath();
-	this.ctx.lineWidth = 3;
-	this.ctx.strokeStyle = 'rgb(108, 116, 128)';
-	this.ctx.arc(
-		this.ctx.canvas.width / 2, 
-		this.ctx.canvas.height / 2, 
+    super.getContext().clearRect(0, 0, super.getContext().canvas.width, super.getContext().canvas.height);
+	super.getContext().beginPath();
+	super.getContext().lineWidth = 3;
+	super.getContext().strokeStyle = 'rgb(108, 116, 128)';
+	super.getContext().arc(
+		super.getContext().canvas.width / 2, 
+		super.getContext().canvas.height / 2, 
 		100, 
 		1.5 * Math.PI, 
 		this.progress * 2 * Math.PI + 1.5 * Math.PI
 	);
-	this.ctx.stroke();
+	super.getContext().stroke();
   }
 }

@@ -1,8 +1,9 @@
-export default class Gameserver {
-	constructor(ctx, gs, fixDPI) {
-      this.ctx = ctx;
+import Canvasobject from './canvasobject.js'
+
+export default class Gameserver extends Canvasobject {
+	constructor(gs, fixDPI) {
+	  super();
       this.gs = gs;
-      this.fixDPI = fixDPI;
       this.offset = 5;
 	}
 
@@ -25,8 +26,8 @@ export default class Gameserver {
     }
 
     drawColors() {
-	   let canvasWidth = this.ctx.canvas.width;
-	   let canvasHeight = this.ctx.canvas.height;
+	   let canvasWidth = super.getContext().canvas.width;
+	   let canvasHeight = super.getContext().canvas.height;
 
 	   let gameAreaSize = Math.min(canvasWidth, canvasHeight);
 
@@ -35,8 +36,8 @@ export default class Gameserver {
 	   
       for (let r = 0; r < this.colors.length; r++) {
         for (let c = 0; c < this.colors[r].length; c++) {
-          this.ctx.fillStyle = "#" + this.colors[r][c].toString(16);
-          this.ctx.fillRect(
+          super.getContext().fillStyle = "#" + this.colors[r][c].toString(16);
+          super.getContext().fillRect(
 	    				(gameAreaSize / this.colors.length) * r + this.offset + (gameAreaOffsetW / 2),
 	    				(gameAreaSize / this.colors[r].length) * c + this.offset + (gameAreaOffsetH / 2),
 	    				(gameAreaSize / this.colors.length) - (2*this.offset),
@@ -47,8 +48,7 @@ export default class Gameserver {
     }
 
     render() {
-      this.fixDPI();
-      this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+      super.getContext().clearRect(0, 0, super.getContext().canvas.width, super.getContext().canvas.height);
       this.drawColors();
     }
 }
