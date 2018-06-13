@@ -48,7 +48,7 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 	gs.World.SpawnNewPlayer(c.Player)
 
 	gs.Users[c] = c.Player
-	go c.Player.collectInput(conn)
+	go c.collectInput(conn)
 }
 
 func validateToken(token string) bool {
@@ -61,7 +61,7 @@ func (gs *GameServer) MapUpdater() {
 		if len(gs.Users) > 1 {
 			// TODO somewhere we are going to a nil snake location and calling move on that
 			gs.World.Update()
-			view := gs.World.render()
+			view := gs.World.Render()
 
 			for k := range gs.Users {
 				// TODO this is too large?

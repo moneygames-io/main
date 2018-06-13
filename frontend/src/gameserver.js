@@ -5,6 +5,13 @@ export default class Gameserver extends Canvasobject {
 	  super();
       this.gs = gs;
       this.offset = 5;
+	  this.controls = {
+	  	CurrentDirection : 0,
+		CurrentSprint : false,
+		CurrentZoomLevel : 1
+	  };
+	  window.addEventListener('keydown', this.handleKeyDown.bind(this), false);
+	  window.addEventListener('keyup', this.handleKeyUp.bind(this), false);
 	}
 
     connect() {
@@ -46,6 +53,40 @@ export default class Gameserver extends Canvasobject {
         }
       }
     }
+
+	// TODO are these right? Is the map oriented wrong? 
+	handleKeyDown(e) {
+		switch (e.key) {
+			case "ArrowUp":
+				this.controls.CurrentDirection = 3
+				break
+			case "ArrowRight":
+				this.controls.CurrentDirection = 0
+				break
+			case "ArrowDown":
+				this.controls.CurrentDirection = 1
+				break
+			case "ArrowLeft":
+				this.controls.CurrentDirection = 2
+				break
+			case " ":
+				this.controls.CurrentSprint = true
+				break
+		}
+
+		this.sendKeyStatus()
+	}
+
+	handleKeyUp(e) {
+		if (e.key === " ") {
+			this.controls.CurrentSprint = false
+		}
+		this.sendKeyStatus()
+	}
+
+	sendKeyStatus() {
+		this.socket.send(JSON.stringify(this.controls));
+	}
 
     render() {
       super.getContext().clearRect(0, 0, super.getContext().canvas.width, super.getContext().canvas.height);

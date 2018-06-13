@@ -21,3 +21,14 @@ func NewClient(r *RegisterMessage, conn *websocket.Conn) *Client {
 
 	return c
 }
+
+func (c *Client) collectInput(conn *websocket.Conn) {
+	msg := &ClientUpdateMessage{}
+	for {
+		conn.ReadJSON(msg)
+		c.Player.CurrentDirection = msg.CurrentDirection
+		c.Player.CurrentSprint = msg.CurrentSprint
+
+		c.CurrentZoomLevel = msg.CurrentZoomLevel
+	}
+}

@@ -123,7 +123,7 @@ func (m *Map) Update() {
 		}
 	}
 }
-func (m *Map) getColor(tile *Tile) uint32 {
+func (m *Map) GetColor(tile *Tile) uint32 {
 	if tile.Food != nil {
 		return 0x00FF00
 	}
@@ -142,7 +142,7 @@ func (m *Map) getColor(tile *Tile) uint32 {
 
 // TODO test this function
 // TODO select from existing color palette
-func (m *Map) render() [][]uint32 {
+func (m *Map) Render() [][]uint32 {
 	colors := make([][]uint32, len(m.Tiles))
 
 	for i := range m.Tiles {
@@ -151,7 +151,7 @@ func (m *Map) render() [][]uint32 {
 
 	for r := range m.Tiles {
 		for c := range m.Tiles[r] {
-			colors[r][c] = m.getColor(&m.Tiles[r][c])
+			colors[r][c] = m.GetColor(&m.Tiles[r][c])
 		}
 	}
 
@@ -160,3 +160,5 @@ func (m *Map) render() [][]uint32 {
 
 // TODO add get number of snakes/ get number of foods
 // TODO get size
+
+// TODO do we really need those things?
