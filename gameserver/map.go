@@ -53,7 +53,7 @@ func (m *Map) SpawnNewPlayer(player *Player) (int, int) {
 		col = rand.Intn(len(m.Tiles[0]))
 	}
 
-	m.SpawnFood(2);
+	m.SpawnFood(2)
 
 	return m.SpawnNewPlayerAt(player, col, row)
 }
@@ -71,7 +71,7 @@ func (m *Map) SpawnFood(num int) {
 	// TODO This def needs to be tested
 	m.AddFood(&Food{col, row})
 
-	if num - 1 > 0 {
+	if num-1 > 0 {
 		m.SpawnFood(num - 1)
 	}
 }
@@ -143,6 +143,7 @@ func (m *Map) Update() {
 		}
 	}
 }
+
 func (m *Map) GetColor(tile *Tile) uint32 {
 	if tile.Food != nil {
 		return 0x00FF00
