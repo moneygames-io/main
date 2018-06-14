@@ -53,7 +53,27 @@ func (m *Map) SpawnNewPlayer(player *Player) (int, int) {
 		col = rand.Intn(len(m.Tiles[0]))
 	}
 
+	m.SpawnFood(2);
+
 	return m.SpawnNewPlayerAt(player, col, row)
+}
+
+func (m *Map) SpawnFood(num int) {
+	rand.Seed(time.Now().UnixNano())
+	row := rand.Intn(len(m.Tiles))
+	col := rand.Intn(len(m.Tiles[0]))
+
+	for m.Tiles[row][col].Snake != nil && m.Tiles[row][col].Food != nil {
+		row = rand.Intn(len(m.Tiles))
+		col = rand.Intn(len(m.Tiles[0]))
+	}
+
+	// TODO This def needs to be tested
+	m.AddFood(&Food{col, row})
+
+	if num - 1 > 0 {
+		m.SpawnFood(num - 1)
+	}
 }
 
 func (m *Map) SpawnNewPlayerAt(player *Player, col int, row int) (int, int) {
