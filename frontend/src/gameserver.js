@@ -32,6 +32,14 @@ export default class Gameserver extends Canvasobject {
       window.requestAnimationFrame(this.render.bind(this));
     }
 
+	toHexString(n) {
+        if(n < 0) {
+            n = 0xFFFFFFFF + n + 1;
+        }
+
+        return "#" + ("000000" + n.toString(16).toUpperCase()).substr(-6);
+    }
+
     drawColors() {
 	   let canvasWidth = super.getContext().canvas.width;
 	   let canvasHeight = super.getContext().canvas.height;
@@ -43,7 +51,7 @@ export default class Gameserver extends Canvasobject {
 	   
       for (let r = 0; r < this.colors.length; r++) {
         for (let c = 0; c < this.colors[r].length; c++) {
-          super.getContext().fillStyle = "#" + this.colors[r][c].toString(16);
+          super.getContext().fillStyle = this.toHexString(this.colors[r][c]);
           super.getContext().fillRect(
 	    				(gameAreaSize / this.colors.length) * r + this.offset + (gameAreaOffsetW / 2),
 	    				(gameAreaSize / this.colors[r].length) * c + this.offset + (gameAreaOffsetH / 2),
@@ -84,6 +92,7 @@ export default class Gameserver extends Canvasobject {
 		this.sendKeyStatus()
 	}
 
+	// TODO do not send if did not change
 	sendKeyStatus() {
 		this.socket.send(JSON.stringify(this.controls));
 	}
