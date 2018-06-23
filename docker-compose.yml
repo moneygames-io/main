@@ -1,23 +1,24 @@
 version: '3'
 
 services:
-	frontend:
-		build: frontend
-		ports:
-			"8000:8000"
-	matchmaker:
-		build: matchmaker
-		ports:
-			- "8001:8001"
-	gs1:
-		build: gameserver
-		ports:
-			- "9001:9001"
-	gs2:
-		build: gameserver
-		ports:
-			- "9002:9002"
-	gs3:
-		build: gameserver
-		ports:
-			- "9003:9003"
+  frontend:
+    build: frontend
+    ports:
+      - "9000:9000"
+  matchmaker:
+    build: matchmaker
+    ports:
+      - "8000:8000"
+  gs1:
+    build: gameserver
+    ports:
+      - "9001:10000"
+      
+  gs2:
+    build: gameserver
+    ports:
+      - "9002:10000"
+  gs3:
+    build: gameserver
+    ports:
+      - "9003:10000"
