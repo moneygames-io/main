@@ -1,7 +1,5 @@
 FROM ubuntu:16.04
 
-EXPOSE 9000
-
 RUN apt-get update && apt-get -y install curl
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get -y install nodejs
@@ -15,5 +13,7 @@ RUN npm i
 COPY webpack.config.js .
 COPY dist ./dist
 COPY src ./src
+
+EXPOSE 9000
 
 CMD ["npm", "run", "serve"]

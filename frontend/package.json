@@ -7,7 +7,7 @@
   "description": "",
   "private": "true",
   "scripts": {
-    "serve": "webpack-dev-server"
+    "serve": "webpack-dev-server --host 0.0.0.0"
   },
   "keywords": [],
   "author": "",
