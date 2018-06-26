@@ -1,6 +1,7 @@
 .idea/*
 coverage.out
 node_modules
+bundle.js
 
 gameserver/gameserver
 matchmaker/matchmaker
