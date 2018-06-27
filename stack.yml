@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  frontend:
+    image: parthmehrotra/frontend
+    ports:
+      - "9000:9000"
+  matchmaker:
+    image: parthmehrotra/matchmaker
+    ports:
+      - "8000:8000"
+  gameserver-service:
+    image: parthmehrotra/gameserver-service
+    restart: always
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    restart: always
