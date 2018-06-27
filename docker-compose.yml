@@ -2,18 +2,20 @@ version: '3'
 
 services:
   frontend:
+    image: parthmehrotra/frontend
     build: frontend
     ports:
       - "9000:9000"
   matchmaker:
+    image: parthmehrotra/matchmaker
     build: matchmaker
     ports:
       - "8000:8000"
   gameserver-service:
+    image: parthmehrotra/gameserver-service
     build: gameserver-service
     restart: always
   redis:
-    container_name: redis
     image: redis
     ports:
       - "6379:6379"
