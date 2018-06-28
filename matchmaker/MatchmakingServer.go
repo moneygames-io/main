@@ -12,7 +12,7 @@ func main() {
 
 	http.HandleFunc("/ws", wsHandler)
 
-	panic(http.ListenAndServe(":8001", nil))
+	panic(http.ListenAndServe(":8000", nil))
 }
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {

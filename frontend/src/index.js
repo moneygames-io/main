@@ -3,7 +3,7 @@ import Gameserver from './gameserver.js'
 
 class Index {
 	constructor() {
-	  this.matchmaker = new Matchmaker("ws://127.0.0.1:8001/ws", this.gameserverReady.bind(this));
+	  this.matchmaker = new Matchmaker("ws://" + window.location.hostname + ":8000/ws", this.gameserverReady.bind(this));
 
 	  this.matchmaker.joinQueue();
 	}
