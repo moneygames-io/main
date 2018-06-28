@@ -2,6 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/filters"
+	"github.com/docker/docker/api/types/swarm"
+	"github.com/docker/docker/client"
+
 	"github.com/go-redis/redis"
 	"time"
 )
@@ -31,5 +36,5 @@ func doEvery(d time.Duration, f func(*redis.Client), c *redis.Client) {
 }
 
 func checkRedis(c *redis.Client) {
-	fmt.Printf("%v: Hello, World!\n")
+
 }
