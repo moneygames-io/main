@@ -2,11 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/api/types/filters"
-	"github.com/docker/docker/api/types/swarm"
-	"github.com/docker/docker/client"
-
 	"github.com/go-redis/redis"
 	"time"
 )
@@ -35,6 +30,22 @@ func doEvery(d time.Duration, f func(*redis.Client), c *redis.Client) {
 	}
 }
 
-func checkRedis(c *redis.Client) {
+func addGameServer() {
+	fmt.Println("Adding Game Server")
+}
 
+func checkRedis(c *redis.Client) {
+	idleCount := 0
+	keys, _ := c.Keys("*").Result()
+
+	for _, key := range keys {
+		status, _ := c.Get(key).Result()
+		if status == "idle" {
+			idleCount++
+		}
+	}
+
+	if idleCount < 2 {
+		addGameServer()
+	}
 }
