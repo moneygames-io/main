@@ -1,3 +1,1 @@
-docker build -t gameserver-service .
-docker tag gameserver-service parthmehrotra/matchmaker
-docker push parthmehrotra/gameserver-service
+docker build -t gameserver-service . && docker tag gameserver-service parthmehrotra/gameserver-service && docker push parthmehrotra/gameserver-service
