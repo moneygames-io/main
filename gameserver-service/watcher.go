@@ -1,10 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"github.com/go-redis/redis"
 	"strconv"
 	"time"
+
+	"github.com/go-redis/redis"
+
+	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/swarm"
+	"github.com/docker/docker/client"
 )
 
 var currentPort int
@@ -28,6 +34,7 @@ func main() {
 	}
 
 	fmt.Println("not exiting")
+	// TODO redis has pubsub which might be better than polling
 	doEvery(3*time.Second, checkRedis, client)
 }
 
@@ -37,10 +44,41 @@ func doEvery(d time.Duration, f func(*redis.Client), c *redis.Client) {
 	}
 }
 
-func addGameServer(c *redis.Client) {
-	err := c.Set(strconv.Itoa(currentPort), "idle", 0).Err()
-	if err != nil {
-		fmt.Println(err)
+func makeSpec(image string) swarm.ServiceSpec {
+	max := uint64(1)
+
+	spec := swarm.ServiceSpec{
+		TaskTemplate: swarm.TaskSpec{
+			RestartPolicy: &swarm.RestartPolicy{
+				MaxAttempts: &max,
+				Condition:   swarm.RestartPolicyConditionNone,
+			},
+			ContainerSpec: &swarm.ContainerSpec{
+				Image: image,
+			},
+		},
+	}
+	return spec
+}
+
+func addGameServer(redisClient *redis.Client) {
+	dockerClient, dockerErr := client.NewEnvClient()
+	if dockerErr != nil {
+		fmt.Println("DOCKER ERROR")
+		fmt.Println(dockerErr)
+	}
+
+	createResponse, serviceErr := dockerClient.ServiceCreate(context.Background(), makeSpec("parthmehrotra/gameserver"), types.ServiceCreateOptions{})
+	fmt.Println(createResponse)
+	if serviceErr != nil {
+		fmt.Println("Service ERROR")
+		fmt.Println(serviceErr)
+	}
+
+	redisErr := redisClient.Set(strconv.Itoa(currentPort), "idle", 0).Err()
+	if redisErr != nil {
+		fmt.Println("REDDIS ERROR")
+		fmt.Println(serviceErr)
 	}
 	currentPort++
 }
