@@ -44,7 +44,7 @@ func doEvery(d time.Duration, f func(*redis.Client), c *redis.Client) {
 	}
 }
 
-func makeSpec(image string) swarm.ServiceSpec {
+func makeSpec(image string, externPort int) swarm.ServiceSpec {
 	max := uint64(1)
 
 	spec := swarm.ServiceSpec{
@@ -54,7 +54,18 @@ func makeSpec(image string) swarm.ServiceSpec {
 				Condition:   swarm.RestartPolicyConditionNone,
 			},
 			ContainerSpec: swarm.ContainerSpec{
+				Labels: map[string]string{
+					"Name": "Gameserver",
+				},
 				Image: image,
+			},
+		},
+		EndpointSpec: &swarm.EndpointSpec{
+			Ports: []swarm.PortConfig{
+				swarm.PortConfig{
+					TargetPort:    uint32(10000),
+					PublishedPort: uint32(externPort),
+				},
 			},
 		},
 	}
@@ -66,15 +77,17 @@ func addGameServer(redisClient *redis.Client) {
 	if dockerErr != nil {
 		fmt.Println("DOCKER ERROR")
 		fmt.Println(dockerErr)
+		return
 	}
 
-	spec := makeSpec("parthmehrotra/gameserver")
+	spec := makeSpec("parthmehrotra/gameserver", currentPort)
 
 	createResponse, serviceErr := dockerClient.ServiceCreate(context.Background(), spec, types.ServiceCreateOptions{})
 	fmt.Println(createResponse)
 	if serviceErr != nil {
 		fmt.Println("Service ERROR")
 		fmt.Println(serviceErr)
+		return
 	}
 
 	redisErr := redisClient.Set(strconv.Itoa(currentPort), "idle", 0).Err()
