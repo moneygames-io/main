@@ -17,6 +17,11 @@ services:
     restart: always
     depends_on:
       - redis
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [ node.role == manager ]
     links:
       - redis
   redis:

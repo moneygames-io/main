@@ -9,6 +9,6 @@ RUN dep ensure --vendor-only
 
 COPY . .
 RUN dep ensure
-RUN go build
+RUN go install -v ./...
 
 CMD ["app"]
