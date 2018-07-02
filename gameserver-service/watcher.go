@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
@@ -72,6 +74,22 @@ func makeSpec(image string, externPort int) swarm.ServiceSpec {
 	return spec
 }
 
+func makeOpts() types.ServiceCreateOptions {
+	authConfig := types.AuthConfig{
+		Username: "parthmehrotra",
+		Password: PASSWORD,
+	}
+	encodedJSON, err := json.Marshal(authConfig)
+	if err != nil {
+		panic(err)
+	}
+	authStr := base64.URLEncoding.EncodeToString(encodedJSON)
+	return types.ServiceCreateOptions{
+		EncodedRegistryAuth: authConfig,
+		QueryRegistry:       true,
+	}
+}
+
 func addGameServer(redisClient *redis.Client) {
 	dockerClient, dockerErr := client.NewEnvClient()
 	if dockerErr != nil {
@@ -80,9 +98,15 @@ func addGameServer(redisClient *redis.Client) {
 		return
 	}
 
+	opts := makeOpts()
 	spec := makeSpec("parthmehrotra/gameserver", currentPort)
 
-	createResponse, serviceErr := dockerClient.ServiceCreate(context.Background(), spec, types.ServiceCreateOptions{})
+	createResponse, serviceErr :=
+		dockerClient.ServiceCreate(
+			context.Background(),
+			makeSpec("parthmehrotra/gameserver", currentPort),
+			makeOpts())
+
 	fmt.Println(createResponse)
 	if serviceErr != nil {
 		fmt.Println("Service ERROR")
