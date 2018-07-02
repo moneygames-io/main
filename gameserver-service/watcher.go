@@ -53,7 +53,7 @@ func makeSpec(image string) swarm.ServiceSpec {
 				MaxAttempts: &max,
 				Condition:   swarm.RestartPolicyConditionNone,
 			},
-			ContainerSpec: &swarm.ContainerSpec{
+			ContainerSpec: swarm.ContainerSpec{
 				Image: image,
 			},
 		},
@@ -68,7 +68,9 @@ func addGameServer(redisClient *redis.Client) {
 		fmt.Println(dockerErr)
 	}
 
-	createResponse, serviceErr := dockerClient.ServiceCreate(context.Background(), makeSpec("parthmehrotra/gameserver"), types.ServiceCreateOptions{})
+	spec := makeSpec("parthmehrotra/gameserver")
+
+	createResponse, serviceErr := dockerClient.ServiceCreate(context.Background(), spec, types.ServiceCreateOptions{})
 	fmt.Println(createResponse)
 	if serviceErr != nil {
 		fmt.Println("Service ERROR")
