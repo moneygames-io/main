@@ -3,5 +3,7 @@ coverage.out
 node_modules
 bundle.js
 
+secrets.go
+
 gameserver/gameserver
 matchmaker/matchmaker
