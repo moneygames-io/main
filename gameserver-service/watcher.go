@@ -50,15 +50,19 @@ func makeSpec(image string, externPort int) swarm.ServiceSpec {
 	max := uint64(1)
 
 	spec := swarm.ServiceSpec{
+		Annotations: swarm.Annotations{
+			Name: "gameserver_" + strconv.Itoa(externPort),
+			Labels: map[string]string{
+				"com.docker.stack.image":     "parthmehrotra/gameserver",
+				"com.docker.stack.namespace": "sneks",
+			},
+		},
 		TaskTemplate: swarm.TaskSpec{
 			RestartPolicy: &swarm.RestartPolicy{
 				MaxAttempts: &max,
 				Condition:   swarm.RestartPolicyConditionNone,
 			},
 			ContainerSpec: swarm.ContainerSpec{
-				Labels: map[string]string{
-					"Name": "Gameserver",
-				},
 				Image: image,
 			},
 		},
@@ -85,8 +89,7 @@ func makeOpts() types.ServiceCreateOptions {
 	}
 	authStr := base64.URLEncoding.EncodeToString(encodedJSON)
 	return types.ServiceCreateOptions{
-		EncodedRegistryAuth: authConfig,
-		QueryRegistry:       true,
+		EncodedRegistryAuth: authStr,
 	}
 }
 
@@ -97,9 +100,6 @@ func addGameServer(redisClient *redis.Client) {
 		fmt.Println(dockerErr)
 		return
 	}
-
-	opts := makeOpts()
-	spec := makeSpec("parthmehrotra/gameserver", currentPort)
 
 	createResponse, serviceErr :=
 		dockerClient.ServiceCreate(
