@@ -1,1 +1,1 @@
-docker stack deploy --compose-file docker-compose.yml sneks
+docker stack deploy --with-registry-auth --compose-file docker-compose.yml sneks
