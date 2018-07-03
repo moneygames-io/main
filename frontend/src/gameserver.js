@@ -15,7 +15,7 @@ export default class Gameserver extends Canvasobject {
 	}
 
     connect() {
-      this.socket = new WebSocket(this.gs["Url"]);
+      this.socket = new WebSocket(this.gs);
       this.socket.onopen = this.socketOpened.bind(this);
       this.socket.onmessage = this.mapReceived.bind(this);
     }

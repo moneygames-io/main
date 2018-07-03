@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/gorilla/websocket"
 
@@ -17,19 +18,24 @@ type Matchmaker struct {
 }
 
 func NewMatchmaker(target int) *Matchmaker {
-	client := redis.NewClient(&redis.Options{
-		Addr:     "redis:6379",
-		Password: "",
-		DB:       0,
-	})
+	// TODO this is the other approach to not being able to connect to redis.
+	// The first one is to just to exit 1 it's what gameserver-service does
 
-	_, err := client.Ping().Result()
+	for {
+		client := redis.NewClient(&redis.Options{
+			Addr:     "redis:6379",
+			Password: "",
+			DB:       0,
+		})
+		_, err := client.Ping().Result()
 
-	if err != nil {
-		fmt.Println("Matchmaker could not connect to redis")
-		fmt.Println(err)
-		return nil
+		if err != nil {
+			fmt.Println("Matchmaker could not connect to redis")
+			fmt.Println(err)
+		}
+		time.Sleep(500 * time.Millisecond)
 	}
+
 	return &Matchmaker{nil, nil, client, 0, target}
 }
 

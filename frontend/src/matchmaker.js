@@ -21,7 +21,7 @@ export default class Matchmaker extends Canvasobject {
   matchmakingMessage(e) {
     let data = JSON.parse(e.data);
     if (data['Port']) {
-		this.gameserverCallback("ws://" + window.location.hostname + ":" + data['Port']);
+		this.gameserverCallback("ws://" + window.location.hostname + ":" + data['Port'] + "/ws");
     }
 
     if (data['Status']) {

@@ -23,6 +23,7 @@ func main() {
 	gameserver = &GameServer{make(map[*Client]*Player), NewMap(2)}
 	go gameserver.MapUpdater()
 
+	// TODO other cool routes, spectator mode, analytics mode
 	http.HandleFunc("/ws", wsHandler)
 	fmt.Println("ID", getID())
 	panic(http.ListenAndServe(":10000", nil))
