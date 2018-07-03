@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gorilla/websocket"
 	"net/http"
 )
@@ -8,6 +9,7 @@ import (
 var matchmaker *Matchmaker
 
 func main() {
+	fmt.Println("Matchmaker started")
 	matchmaker = NewMatchmaker(2)
 
 	http.HandleFunc("/ws", wsHandler)

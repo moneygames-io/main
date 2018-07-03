@@ -21,8 +21,10 @@ func NewMatchmaker(target int) *Matchmaker {
 	// TODO this is the other approach to not being able to connect to redis.
 	// The first one is to just to exit 1 it's what gameserver-service does
 
+	var client *redis.Client
 	for {
-		client := redis.NewClient(&redis.Options{
+		fmt.Println("Attempting to connect to redis")
+		client = redis.NewClient(&redis.Options{
 			Addr:     "redis:6379",
 			Password: "",
 			DB:       0,
@@ -32,9 +34,13 @@ func NewMatchmaker(target int) *Matchmaker {
 		if err != nil {
 			fmt.Println("Matchmaker could not connect to redis")
 			fmt.Println(err)
+		} else {
+			break
 		}
 		time.Sleep(500 * time.Millisecond)
 	}
+
+	fmt.Println("Connected to redis")
 
 	return &Matchmaker{nil, nil, client, 0, target}
 }
