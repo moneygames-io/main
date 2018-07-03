@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -60,11 +61,13 @@ func validateToken(token string) bool {
 	return true
 }
 
+// TODO Need a better game start detection and game end detection.
 func (gs *GameServer) MapUpdater() {
-	// TODO Wait to start doing this channel? After the last connction is established?
+	gameStarted := false
+	// TODO Many ways to do this without polling
 	for {
 		if len(gs.Users) > 1 {
-			// TODO somewhere we are going to a nil snake location and calling move on that
+			gameStarted = true
 			gs.World.Update()
 			view := gs.World.Render()
 
@@ -72,8 +75,13 @@ func (gs *GameServer) MapUpdater() {
 				// TODO this is too large?
 				k.Conn.WriteJSON(&view)
 			}
-
-			time.Sleep(500 * time.Millisecond)
 		}
+
+		if len(gs.World.Players) == 1 && gameStarted {
+			// TODO Cleanup
+			os.Exit(0)
+		}
+
+		time.Sleep(500 * time.Millisecond)
 	}
 }

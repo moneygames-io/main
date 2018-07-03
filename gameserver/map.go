@@ -178,8 +178,3 @@ func (m *Map) Render() [][]uint32 {
 
 	return colors
 }
-
-// TODO add get number of snakes/ get number of foods
-// TODO get size
-
-// TODO do we really need those things?

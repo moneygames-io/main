@@ -9,25 +9,11 @@ import (
 )
 
 type Matchmaker struct {
-	statusChannels    []chan int
-	gameserverChannel []chan Server
-	redisClient       *redis.Client
-	CurrentClients    int
-	TargetClients     int
-}
-
-// TODO https://stackoverflow.com/questions/7893776/the-most-accurate-way-to-check-js-objects-type
-// This and type switches are the type of things you need to be dealing with, not these nested messages.
-type MatchmakerMessage struct {
-	Status Matchmaker
-}
-
-type Server struct {
-	Url string
-}
-
-type ServerInfoMessage struct {
-	Url Server
+	StatusChannels     []chan string
+	GameserverChannels []chan string
+	RedisClient        *redis.Client
+	CurrentClients     int
+	TargetClients      int
 }
 
 func NewMatchmaker(target int) *Matchmaker {
@@ -42,13 +28,13 @@ func NewMatchmaker(target int) *Matchmaker {
 	if err != nil {
 		fmt.Println("Matchmaker could not connect to redis")
 		fmt.Println(err)
-		return
+		return nil
 	}
 	return &Matchmaker{nil, nil, client, 0, target}
 }
 
-func (m *Matchmaker) popServer() string {
-	c := m.redisClient
+func (m *Matchmaker) getIdleGameserver() string {
+	c := m.RedisClient
 
 	keys, _ := c.Keys("*").Result()
 
@@ -59,29 +45,31 @@ func (m *Matchmaker) popServer() string {
 			return key
 		}
 	}
+
+	return "" // TODO FATAL situation. I think if this happens it's one of the worst things possible.
 }
 
 func (m *Matchmaker) PlayerJoined(conn *websocket.Conn) {
 	m.CurrentClients++
 
-	status := make(chan int)
-	m.statusChannels = append(m.statusChannels, status)
+	status := make(chan string)
+	m.StatusChannels = append(m.StatusChannels, status)
 
-	gameserver := make(chan Server)
-	m.gameserverChannel = append(m.gameserverChannel, gameserver)
+	gameserver := make(chan string)
+	m.GameserverChannels = append(m.GameserverChannels, gameserver)
 
 	go m.syncMatchmaker(conn, status, gameserver)
 
-	for _, statusChannel := range m.statusChannels {
-		statusChannel <- 1
+	for _, statusChannel := range m.StatusChannels {
+		statusChannel <- "nop"
 	}
 
 	if m.CurrentClients == m.TargetClients {
 
-		selectedServer := popServer()
+		selectedPort := m.getIdleGameserver()
 
-		for _, gameChannel := range m.gameserverChannel {
-			gameChannel <- selectedServer
+		for _, gameChannel := range m.GameserverChannels {
+			gameChannel <- selectedPort
 		}
 
 		m.CurrentClients = 0
@@ -89,15 +77,22 @@ func (m *Matchmaker) PlayerJoined(conn *websocket.Conn) {
 	}
 }
 
-func (m *Matchmaker) syncMatchmaker(conn *websocket.Conn, status chan int, gameserver chan Server) {
+func (m *Matchmaker) syncMatchmaker(conn *websocket.Conn, status chan string, gameserver chan string) {
 	for {
 		select {
 		case <-status:
-			if err := conn.WriteJSON(MatchmakerMessage{*m}); err != nil {
+			if err := conn.WriteJSON(map[string]map[string]int{
+				"Status": {
+					"CurrentClients": m.CurrentClients,
+					"TargetClients":  m.TargetClients,
+				},
+			}); err != nil {
 				fmt.Println(err)
 			}
 		case gs := <-gameserver:
-			if err := conn.WriteJSON(ServerInfoMessage{gs}); err != nil {
+			if err := conn.WriteJSON(map[string]string{
+				"Port": gs,
+			}); err != nil {
 				fmt.Println(err)
 			}
 			conn.Close()
