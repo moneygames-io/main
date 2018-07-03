@@ -30,12 +30,11 @@ func main() {
 	_, err := client.Ping().Result()
 
 	if err != nil {
+		fmt.Println("Gameserver-service could not connect to redis")
 		fmt.Println(err)
-		fmt.Println("exiting")
 		return
 	}
 
-	fmt.Println("not exiting")
 	// TODO redis has pubsub which might be better than polling
 	doEvery(3*time.Second, checkRedis, client)
 }
@@ -64,6 +63,7 @@ func makeSpec(image string, externPort int) swarm.ServiceSpec {
 			},
 			ContainerSpec: swarm.ContainerSpec{
 				Image: image,
+				Env:   []string{"GSPORT=" + strconv.Itoa(externPort)},
 			},
 		},
 		EndpointSpec: &swarm.EndpointSpec{

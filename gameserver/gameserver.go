@@ -14,11 +14,16 @@ type GameServer struct {
 
 var gameserver *GameServer
 
+func getID() string {
+	return ":" + os.Getenv("GSPORT")
+}
+
 func main() {
 	gameserver = &GameServer{make(map[*Client]*Player), NewMap(2)}
 	go gameserver.MapUpdater()
 
 	http.HandleFunc("/ws", wsHandler)
+	fmt.Println("ID", getID())
 	panic(http.ListenAndServe(":10000", nil))
 }
 
@@ -28,7 +33,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Could not open websocket connection", http.StatusBadRequest)
 	}
 
-	gameserver.PlayerJoined(conn) // Should / can this be asyncronous
+	gameserver.PlayerJoined(conn) // TODO Should / can this be asyncronous
 }
 
 func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
