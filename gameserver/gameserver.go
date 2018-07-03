@@ -73,6 +73,7 @@ func (gs *GameServer) MapUpdater() {
 
 			for k := range gs.Users {
 				// TODO this is too large?
+				// TODO Should this be async? Is it even blocking?
 				k.Conn.WriteJSON(&view)
 			}
 		}
@@ -82,6 +83,7 @@ func (gs *GameServer) MapUpdater() {
 			os.Exit(0)
 		}
 
+		// TODO Should be based on how much time has elapsed
 		time.Sleep(500 * time.Millisecond)
 	}
 }
