@@ -2,9 +2,11 @@
 package main
 
 import (
-	"github.com/Parth/boolean"
 	"math/rand"
 	"time"
+
+	"github.com/Parth/boolean"
+	"github.com/kutase/go-gameloop"
 )
 
 type Tile struct {
@@ -30,10 +32,10 @@ type MapEvent interface {
 
 func NewMap(players int) *Map {
 	newMap := &Map{}
-	newMap.Tiles = make([][]Tile, players*10)
+	newMap.Tiles = make([][]Tile, players*25)
 
 	for i := range newMap.Tiles {
-		newMap.Tiles[i] = make([]Tile, players*10)
+		newMap.Tiles[i] = make([]Tile, players*25)
 	}
 
 	newMap.Players = make(map[*Player]*Snake)
