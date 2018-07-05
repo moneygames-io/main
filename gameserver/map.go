@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/Parth/boolean"
-	"github.com/kutase/go-gameloop"
 )
 
 type Tile struct {

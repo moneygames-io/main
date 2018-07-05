@@ -64,6 +64,10 @@ func makeSpec(image string, externPort int) swarm.ServiceSpec {
 			ContainerSpec: swarm.ContainerSpec{
 				Image: image,
 				Env:   []string{"GSPORT=" + strconv.Itoa(externPort)},
+				Labels: map[string]string{
+					"com.docker.stack.image":     "parthmehrotra/gameserver",
+					"com.docker.stack.namespace": "sneks",
+				},
 			},
 		},
 		EndpointSpec: &swarm.EndpointSpec{

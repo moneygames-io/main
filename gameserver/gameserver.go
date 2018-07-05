@@ -8,23 +8,37 @@ import (
 
 	"github.com/go-redis/redis"
 	"github.com/gorilla/websocket"
-	"github.com/kutase/go-gameloop"
+	"github.com/parth/go-gameloop"
 )
 
 type GameServer struct {
 	Users       map[*Client]*Player
 	World       *Map
 	RedisClient *redis.Client
+	ID          string
 }
 
 var gameserver *GameServer
-var gameLoop *GameLoop
 
-func getID() string {
-	return os.Getenv("GSPORT")
-}
+//TODO Should be a member of gameserver? Are there problems with that?
+var gl *gameLoop.GameLoop
 
 func main() {
+	gameserver = &GameServer{
+		Users:       make(map[*Client]*Player),
+		World:       NewMap(2),
+		RedisClient: connectToRedis(),
+		ID:          os.Getenv("GSPORT"),
+	}
+
+	gl = gameLoop.New(2, gameserver.MapUpdater)
+	gameserver.RedisClient.Set(gameserver.ID, "waiting for players", 0)
+
+	http.HandleFunc("/ws", wsHandler)
+	panic(http.ListenAndServe(":10000", nil))
+}
+
+func connectToRedis() *redis.Client {
 	var client *redis.Client
 	for {
 		client = redis.NewClient(&redis.Options{
@@ -34,23 +48,17 @@ func main() {
 		})
 		_, err := client.Ping().Result()
 		if err != nil {
-			fmt.Println("Matchmaker could not connect to redis")
+			fmt.Println("gameserver could not connect to redis")
 			fmt.Println(err)
 		} else {
 			break
 		}
 		time.Sleep(500 * time.Millisecond)
 	}
-	gameserver = &GameServer{make(map[*Client]*Player), NewMap(2)}
 
-	gameLoop = gameLoop.New(10, MapUpdater)
-	go gameserver.MapUpdater()
+	fmt.Println("gameserver connected to redis")
 
-	// TODO other cool routes, spectator mode, analytics mode
-	http.HandleFunc("/ws", wsHandler)
-
-	client.Set(getID(), "waiting for players")
-	panic(http.ListenAndServe(":10000", nil))
+	return client
 }
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
@@ -79,32 +87,34 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 
 	gs.Users[c] = c.Player
 	go c.collectInput(conn)
+
+	if len(gs.Users) > 1 {
+		gl.Start()
+	}
 }
 
 func validateToken(token string) bool {
+	// TODO
 	return true
 }
 
 // TODO Need a better game start detection and game end detection.
 func (gs *GameServer) MapUpdater(delta float64) {
-	gameStarted := false
-	// TODO Many ways to do this without polling
-	if len(gs.Users) > 1 {
-		gs.RedisClient.Set(getID(), "game started")
-		gameStarted = true
-		re
-		gs.World.Update()
-		view := gs.World.Render()
+	// TODO gameserver state function
+	gs.RedisClient.Set(gs.ID, "game started", 0)
+	gs.World.Update()
+	view := gs.World.Render()
 
-		for k := range gs.Users {
-			// TODO this is too large?
-			// TODO Should this be async? Is it even blocking?
-			k.Conn.WriteJSON(&view)
-		}
+	for k := range gs.Users {
+		// TODO this is too large?
+		// TODO Should this be async? Is it even blocking?
+		k.Conn.WriteJSON(&view)
 	}
 
-	if len(gs.World.Players) == 1 && gameStarted {
+	// TODO It's possible that the game ends before everyone joins
+	if len(gs.World.Players) == 1 {
 		// TODO Cleanup
+		gs.RedisClient.Set(gs.ID, "game finished", 0)
 		os.Exit(0)
 	}
 }
