@@ -87,7 +87,7 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 	gs.Users[c] = c.Player
 	go c.collectInput(conn)
 
-	if len(gs.Users) > 1 && gl.Started == false {
+	if len(gs.Users) > 1 && gl.Running == false {
 		gl.Start()
 		fmt.Println("started")
 	}
