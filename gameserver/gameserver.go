@@ -32,7 +32,6 @@ func main() {
 	}
 
 	gl = gameLoop.New(2, gameserver.MapUpdater)
-	gameserver.RedisClient.Set(gameserver.ID, "waiting for players", 0)
 
 	http.HandleFunc("/ws", wsHandler)
 	panic(http.ListenAndServe(":10000", nil))
