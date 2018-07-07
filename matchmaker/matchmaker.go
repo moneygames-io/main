@@ -19,9 +19,6 @@ type Matchmaker struct {
 }
 
 func NewMatchmaker(target int) *Matchmaker {
-	// TODO this is the other approach to not being able to connect to redis.
-	// The first one is to just to exit 1 it's what gameserver-service does
-
 	var client *redis.Client
 	for {
 		fmt.Println("Attempting to connect to redis")
