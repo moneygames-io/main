@@ -16,12 +16,10 @@ type GameServer struct {
 	World       *Map
 	RedisClient *redis.Client
 	ID          string
+	GL          *gameLoop.GameLoop
 }
 
 var gameserver *GameServer
-
-//TODO Should be a member of gameserver? Are there problems with that?
-var gl *gameLoop.GameLoop
 
 func main() {
 	gameserver = &GameServer{
@@ -30,8 +28,7 @@ func main() {
 		RedisClient: connectToRedis(),
 		ID:          os.Getenv("GSPORT"),
 	}
-
-	gl = gameLoop.New(2, gameserver.MapUpdater)
+	gameserver.GL = gameLoop.New(2, gameserver.MapUpdater)
 
 	http.HandleFunc("/ws", wsHandler)
 	panic(http.ListenAndServe(":10000", nil))
@@ -87,8 +84,8 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 	gs.Users[c] = c.Player
 	go c.collectInput(conn)
 
-	if len(gs.Users) > 1 && gl.Running == false {
-		gl.Start()
+	if len(gs.Users) > 1 && gs.GL.Running == false {
+		gs.GL.Start()
 		fmt.Println("started")
 	}
 }
