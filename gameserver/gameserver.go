@@ -87,7 +87,8 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 	gs.Users[c] = c.Player
 	go c.collectInput(conn)
 
-	if len(gs.Users) > 1 {
+	if len(gs.Users) > 1 && gl.started == false {
+		// TODO it's getting started twice
 		gl.Start()
 	}
 }
@@ -107,8 +108,9 @@ func (gs *GameServer) MapUpdater(delta float64) {
 	for k := range gs.Users {
 		// TODO this is too large?
 		// TODO Should this be async? Is it even blocking?
-		k.Conn.WriteJSON(&view)
+		go k.Conn.WriteJSON(&view)
 	}
+	fmt.Println(time.Now())
 
 	// TODO It's possible that the game ends before everyone joins
 	if len(gs.World.Players) == 1 {
