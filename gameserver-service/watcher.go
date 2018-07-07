@@ -69,6 +69,11 @@ func makeSpec(image string, externPort int) swarm.ServiceSpec {
 					"com.docker.stack.namespace": "sneks",
 				},
 			},
+			Networks: []swarm.NetworkAttachmentConfig{
+				swarm.NetworkAttachmentConfig{
+					Target: "sneks_default",
+				},
+			},
 		},
 		EndpointSpec: &swarm.EndpointSpec{
 			Ports: []swarm.PortConfig{
