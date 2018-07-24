@@ -10,7 +10,7 @@ import (
 )
 
 type Matchmaker struct {
-	// TODO these are essentially "signal" structs: https://medium.com/@matryer/golang-advent-calendar-day-two-starting-and-stopping-things-with-a-signal-channel-f5048161018
+	// TODO  these are essentially "signal" structs: https://medium.com/@matryer/golang-advent-calendar-day-two-starting-and-stopping-things-with-a-signal-channel-f5048161018
 	StatusChannels     []chan string
 	GameserverChannels []chan string
 	RedisClient        *redis.Client
@@ -51,12 +51,12 @@ func (m *Matchmaker) getIdleGameserver() string {
 	for _, key := range keys {
 		status, _ := c.Get(key).Result()
 		if status == "idle" {
-			c.Set(key, "started", 0).Err() // TODO Handle error
+			c.Set(key, "started", 0).Err() // TODO  Handle error
 			return key
 		}
 	}
 
-	return "" // TODO FATAL situation. I think if this happens it's one of the worst things possible.
+	return "" // TODO  FATAL situation. I think if this happens it's one of the worst things possible.
 }
 
 func (m *Matchmaker) PlayerJoined(conn *websocket.Conn) {
@@ -83,7 +83,7 @@ func (m *Matchmaker) PlayerJoined(conn *websocket.Conn) {
 		}
 
 		m.CurrentClients = 0
-		//TODO cleanup here
+		//TODO  cleanup here
 	}
 }
 

@@ -17,7 +17,7 @@ import (
 
 var currentPort int
 
-// TODO can we just cut redis out? Can we use docker as a store of state? Do we need to use redis for messaging? Can we just hold this state in memory and just operate on Docker's state?
+// TODO  can we just cut redis out? Can we use docker as a store of state? Do we need to use redis for messaging? Can we just hold this state in memory and just operate on Docker's state?
 
 func main() {
 	currentPort = 10000
@@ -35,7 +35,7 @@ func main() {
 		return
 	}
 
-	// TODO redis has pubsub which might be better than polling
+	// TODO  redis has pubsub which might be better than polling
 	doEvery(3*time.Second, checkRedis, client)
 }
 
