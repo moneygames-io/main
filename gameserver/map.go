@@ -1,4 +1,4 @@
-// @todo Standardize between row/col and x/y across the app
+// TODO Standardize between row/col and x/y across the app
 package main
 
 import (
@@ -49,7 +49,7 @@ func (m *Map) SpawnNewPlayer(player *Player) (int, int) {
 	col := rand.Intn(len(m.Tiles[0]))
 
 	for m.Tiles[row][col].Snake != nil && m.Tiles[row][col].Food != nil {
-		// @todo infinite loop risk
+		// TODO infinite loop risk
 		row = rand.Intn(len(m.Tiles))
 		col = rand.Intn(len(m.Tiles[0]))
 	}
@@ -69,7 +69,7 @@ func (m *Map) SpawnFood(num int) {
 		col = rand.Intn(len(m.Tiles[0]))
 	}
 
-	// @todo This def needs to be tested
+	// TODO This def needs to be tested
 	m.AddFood(&Food{col, row})
 
 	if num-1 > 0 {
@@ -81,7 +81,7 @@ func (m *Map) SpawnNewPlayerAt(player *Player, col int, row int) (int, int) {
 	m.Players[player] = NewSnake(col, row, m, player)
 	player.Snake = m.Players[player]
 
-	// @todo is this return needed?
+	// TODO is this return needed?
 	// Possibly, could be used to indicate a different location if this one is occupied
 	return col, row
 }
@@ -161,8 +161,8 @@ func (m *Map) GetColor(tile *Tile) uint32 {
 	return m.Colors[tile.Snake]
 }
 
-// @todo test this function
-// @todo select from existing color palette
+// TODO test this function
+// TODO select from existing color palette
 func (m *Map) Render() [][]uint32 {
 	colors := make([][]uint32, len(m.Tiles))
 
