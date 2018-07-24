@@ -92,7 +92,7 @@ export default class Gameserver extends Canvasobject {
 		this.sendKeyStatus()
 	}
 
-	// TODO do not send if did not change
+	// TODO  do not send if did not change
 	sendKeyStatus() {
 		this.socket.send(JSON.stringify(this.controls));
 	}
