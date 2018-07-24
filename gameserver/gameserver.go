@@ -63,7 +63,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Could not open websocket connection", http.StatusBadRequest)
 	}
 
-	gameserver.PlayerJoined(conn) // TODO Should / can this be asyncronous
+	gameserver.PlayerJoined(conn)
 }
 
 func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
