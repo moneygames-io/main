@@ -10,7 +10,6 @@ import (
 )
 
 type Matchmaker struct {
-	// TODO  these are essentially "signal" structs: https://medium.com/@matryer/golang-advent-calendar-day-two-starting-and-stopping-things-with-a-signal-channel-f5048161018
 	StatusChannels     []chan string
 	GameserverChannels []chan string
 	RedisClient        *redis.Client
