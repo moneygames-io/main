@@ -62,7 +62,6 @@ export default class Gameserver extends Canvasobject {
       }
     }
 
-
 	// TODO are these right? Is the map oriented wrong? 
 	handleKeyDown(e) {
 		switch (e.key) {
