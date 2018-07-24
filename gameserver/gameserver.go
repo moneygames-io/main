@@ -63,7 +63,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Could not open websocket connection", http.StatusBadRequest)
 	}
 
-	gameserver.PlayerJoined(conn) // TODO Should / can this be asyncronous
+	gameserver.PlayerJoined(conn) // @todo Should / can this be asyncronous
 }
 
 func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
@@ -75,7 +75,7 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 		conn.Close()
 	}
 
-	// TODO token consumed
+	// @todo token consumed
 
 	c := NewClient(message, conn)
 	c.Player = &Player{}
@@ -91,26 +91,26 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 }
 
 func validateToken(token string) bool {
-	// TODO
+	// @todo
 	return true
 }
 
-// TODO Need a better game start detection and game end detection.
+// @todo Need a better game start detection and game end detection.
 func (gs *GameServer) MapUpdater(delta float64) {
-	// TODO gameserver state function
+	// @todo gameserver state function
 	gs.RedisClient.Set(gs.ID, "game started", 0)
 	gs.World.Update()
 	view := gs.World.Render()
 
 	for k := range gs.Users {
-		//TODO reduce size of this
+		//@todo reduce size of this
 		go k.Conn.WriteJSON(&view)
 	}
 	//fmt.Println(time.Now())
 
-	// TODO It's possible that the game ends before everyone joins
+	// @todo It's possible that the game ends before everyone joins
 	if len(gs.World.Players) == 1 {
-		// TODO Cleanup
+		// @todo Cleanup
 		gs.RedisClient.Set(gs.ID, "game finished", 0)
 		os.Exit(0)
 	}

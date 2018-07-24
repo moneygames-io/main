@@ -36,7 +36,7 @@ func TestNewMap(t *testing.T) {
 
 func TestPlayerSpawning(t *testing.T) {
 	m := NewMap(1)
-	p := &Player{"Parth", 0, false, "none", nil}
+	p := &Player{0, false, nil, nil}
 	x, y := m.SpawnNewPlayer(p)
 	assert.NotNil(t, m.Tiles[y][x].Snake)
 
