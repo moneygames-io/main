@@ -49,7 +49,6 @@ func (m *Map) SpawnNewPlayer(player *Player) (int, int) {
 	col := rand.Intn(len(m.Tiles[0]))
 
 	for m.Tiles[row][col].Snake != nil && m.Tiles[row][col].Food != nil {
-		// TODO infinite loop risk
 		row = rand.Intn(len(m.Tiles))
 		col = rand.Intn(len(m.Tiles[0]))
 	}
