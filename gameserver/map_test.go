@@ -49,25 +49,25 @@ func TestPlayerSpawning(t *testing.T) {
 		}
 	}
 
-	assert.True(t, found, "Food should not have been found on this map")
+	assert.True(t, found, "Player not spawned successfully")
 
-	found = false
+	foodCount := 0
 
 	for r := range m.Tiles {
 		for c := range m.Tiles[0] {
 			if m.Tiles[r][c].Food != nil {
-				found = true
+				foodCount++
 			}
 		}
 	}
 
-	assert.False(t, found, "Food should not have been found on this map")
+	assert.Equal(t, 2, foodCount, "Food should not have been found on this map")
 	assert.NotNil(t, p.Snake, "Snake not created properly")
 }
 
 func TestPlayerMovement0ToEdge(t *testing.T) {
 	m := NewMap(1)
-	p := &Player{"Parth", 0, false, "none", nil}
+	p := &Player{0, false, nil, nil}
 	x, y := m.SpawnNewPlayer(p)
 
 	p.CurrentDirection = 0
@@ -88,7 +88,7 @@ func TestPlayerMovement0ToEdge(t *testing.T) {
 
 func TestPlayerMovement1ToEdge(t *testing.T) {
 	m := NewMap(1)
-	p := &Player{"Parth", 0, false, "none", nil}
+	p := &Player{0, false, nil, nil}
 	x, y := m.SpawnNewPlayer(p)
 
 	p.CurrentDirection = 1
@@ -109,7 +109,7 @@ func TestPlayerMovement1ToEdge(t *testing.T) {
 
 func TestPlayerMovement2ToEdge(t *testing.T) {
 	m := NewMap(1)
-	p := &Player{"Parth", 0, false, "none", nil}
+	p := &Player{0, false, nil, nil}
 	x, y := m.SpawnNewPlayer(p)
 
 	p.CurrentDirection = 2
@@ -130,7 +130,7 @@ func TestPlayerMovement2ToEdge(t *testing.T) {
 
 func TestPlayerMovement3ToEdge(t *testing.T) {
 	m := NewMap(1)
-	p := &Player{"Parth", 0, false, "none", nil}
+	p := &Player{0, false, nil, nil}
 	x, y := m.SpawnNewPlayer(p)
 
 	p.CurrentDirection = 3
@@ -150,7 +150,7 @@ func TestPlayerMovement3ToEdge(t *testing.T) {
 
 func TestFoodDynamics(t *testing.T) {
 	m := NewMap(1)
-	p := &Player{"Parth", 0, false, "none", nil}
+	p := &Player{0, false, nil, nil}
 	m.SpawnNewPlayerAt(p, 3, 3)
 	m.AddFood(&Food{3, 5})
 	m.AddFood(&Food{5, 5})
@@ -188,9 +188,9 @@ func TestFoodDynamics(t *testing.T) {
 
 func TestMultiPlayerDynamics(t *testing.T) {
 	m := NewMap(3)
-	p1 := &Player{"P1", 0, false, "none", nil}
-	p2 := &Player{"P2", 0, false, "none", nil}
-	p3 := &Player{"P3", 0, false, "none", nil}
+	p1 := &Player{0, false, nil, nil}
+	p2 := &Player{0, false, nil, nil}
+	p3 := &Player{0, false, nil, nil}
 
 	m.SpawnNewPlayerAt(p1, 24, 21)
 	m.SpawnNewPlayerAt(p2, 25, 24)
