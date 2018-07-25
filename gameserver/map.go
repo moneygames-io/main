@@ -156,8 +156,7 @@ func (m *Map) GetColor(tile *Tile) uint32 {
 	return m.Colors[tile.Snake]
 }
 
-// TODO test this function
-// TODO select from existing color palette
+// TODO do this client side
 func (m *Map) Render() [][]uint32 {
 	colors := make([][]uint32, len(m.Tiles))
 
