@@ -23,6 +23,13 @@ services:
     deploy:
       placement:
         constraints: [ node.role == manager ]
+  payserver:
+    depends_on:
+      - redis
+    image: parthmehrotra/payserver
+    build: matchmaker
+    ports:
+      - "7000:7000"
   redis:
     image: redis
     ports:

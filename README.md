@@ -1,4 +1,4 @@
-# sneks
+# sneks (this document is currently out of date)
 
 Sneks is going to be a really simple game moddeled after [slither.io](slither.io), except we're going to conduct bouts [battle royale style](https://en.wikipedia.org/wiki/Battle_royale_game), and allow people to use [crypto currencies](https://en.wikipedia.org/wiki/Cryptocurrency) to gamble on the outcomes of games.
 
