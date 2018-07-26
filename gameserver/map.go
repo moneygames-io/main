@@ -31,10 +31,10 @@ type MapEvent interface {
 
 func NewMap(players int) *Map {
 	newMap := &Map{}
-	newMap.Tiles = make([][]Tile, players*25)
+	newMap.Tiles = make([][]Tile, players*10)
 
 	for i := range newMap.Tiles {
-		newMap.Tiles[i] = make([]Tile, players*25)
+		newMap.Tiles[i] = make([]Tile, players*10)
 	}
 
 	newMap.Players = make(map[*Player]*Snake)
@@ -49,14 +49,14 @@ func (m *Map) SpawnNewPlayer(player *Player) (int, int) {
 	col := rand.Intn(len(m.Tiles[0]))
 
 	for m.Tiles[row][col].Snake != nil && m.Tiles[row][col].Food != nil {
-		// TODO infinite loop risk
 		row = rand.Intn(len(m.Tiles))
 		col = rand.Intn(len(m.Tiles[0]))
 	}
 
 	m.SpawnFood(2)
 
-	return m.SpawnNewPlayerAt(player, col, row)
+	m.SpawnNewPlayerAt(player, row, col)
+	return row, col
 }
 
 func (m *Map) SpawnFood(num int) {
@@ -69,22 +69,16 @@ func (m *Map) SpawnFood(num int) {
 		col = rand.Intn(len(m.Tiles[0]))
 	}
 
-	// TODO This def needs to be tested
-	m.AddFood(&Food{col, row})
+	m.AddFood(&Food{row, col})
 
 	if num-1 > 0 {
 		m.SpawnFood(num - 1)
 	}
 }
 
-func (m *Map) SpawnNewPlayerAt(player *Player, col int, row int) (int, int) {
-	// TODO check if occupied?
-	m.Players[player] = NewSnake(col, row, m, player)
+func (m *Map) SpawnNewPlayerAt(player *Player, row int, col int) {
+	m.Players[player] = NewSnake(row, col, m, player)
 	player.Snake = m.Players[player]
-
-	// TODO is this return needed?
-	// Possibly, could be used to indicate a different location if this one is occupied
-	return col, row
 }
 
 func (m *Map) SnakeCreated(snake *Snake) {
@@ -92,8 +86,8 @@ func (m *Map) SnakeCreated(snake *Snake) {
 }
 
 func (m *Map) AddNode(snakeNode *SnakeNode) int {
-	col := snakeNode.X
-	row := snakeNode.Y
+	col := snakeNode.Col
+	row := snakeNode.Row
 
 	if row >= len(m.Tiles) || col >= len(m.Tiles[0]) {
 		return 2
@@ -113,13 +107,13 @@ func (m *Map) AddNode(snakeNode *SnakeNode) int {
 	return boolean.BtoI(m.Tiles[row][col].Food != nil)
 }
 
-func (m *Map) RemoveNode(col int, row int) {
+func (m *Map) RemoveNode(row int, col int) {
 	m.Tiles[row][col].Snake = nil
 }
 
 func (m *Map) AddFood(food *Food) {
-	col := food.X
-	row := food.Y
+	col := food.Col
+	row := food.Row
 
 	m.Tiles[row][col].Food = food
 }
@@ -162,8 +156,7 @@ func (m *Map) GetColor(tile *Tile) uint32 {
 	return m.Colors[tile.Snake]
 }
 
-// TODO test this function
-// TODO select from existing color palette
+// TODO do this client side
 func (m *Map) Render() [][]uint32 {
 	colors := make([][]uint32, len(m.Tiles))
 

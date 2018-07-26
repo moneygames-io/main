@@ -2,8 +2,8 @@ package main
 
 type SnakeNode struct {
 	Snake *Snake
-	X     int
-	Y     int
+	Row   int
+	Col   int
 	Next  *SnakeNode
 	Prev  *SnakeNode
 }
