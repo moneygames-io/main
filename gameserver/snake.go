@@ -13,9 +13,9 @@ type Snake struct {
 	Events           MapEvent
 }
 
-func NewSnake(x int, y int, events MapEvent, player ...*Player) *Snake {
+func NewSnake(row int, col int, events MapEvent, player ...*Player) *Snake {
 	s := new(Snake)
-	s.Head = &SnakeNode{s, x, y, nil, nil}
+	s.Head = &SnakeNode{s, row, col, nil, nil}
 	s.Tail = s.Head
 	s.Length = 1
 	s.CurrentDirection = 0
@@ -39,7 +39,7 @@ func (snake *Snake) Move(direction int) {
 		snake.ShortenTail(1)
 		break
 	case 1: // Found Food
-		snake.Events.RemoveFood(snake.Head.X, snake.Head.Y)
+		snake.Events.RemoveFood(snake.Head.Col, snake.Head.Row)
 		break
 	case 2: // Dead
 		snake.Dead()
@@ -56,10 +56,10 @@ func (snake *Snake) Sprint(direction int) {
 	switch status {
 	case 0:
 		oldTail := snake.ShortenTail(2)
-		snake.Events.AddFood(&Food{oldTail.X, oldTail.Y})
+		snake.Events.AddFood(&Food{oldTail.Row, oldTail.Col})
 	case 1:
 		oldTail := snake.ShortenTail(1)
-		snake.Events.AddFood(&Food{oldTail.X, oldTail.Y})
+		snake.Events.AddFood(&Food{oldTail.Row, oldTail.Col})
 	case 2:
 		snake.Dead()
 	}
@@ -72,8 +72,8 @@ func (snake *Snake) GrowHead() int {
 
 	newHead := new(SnakeNode)
 	newHead.Snake = oldHead.Snake
-	newHead.X = dx + oldHead.X
-	newHead.Y = dy + oldHead.Y
+	newHead.Col = dx + oldHead.Col
+	newHead.Row = dy + oldHead.Row
 	newHead.Next = oldHead
 	newHead.Prev = nil
 
@@ -102,7 +102,7 @@ func (snake *Snake) ShortenTail(howMuch int) *SnakeNode {
 	snake.Tail = newTail
 	snake.Length = snake.Length - 1
 
-	snake.Events.RemoveNode(oldTail.X, oldTail.Y)
+	snake.Events.RemoveNode(oldTail.Row, oldTail.Col)
 
 	if howMuch > 1 { // more tail to get rid off
 		return snake.ShortenTail(howMuch - 1)
@@ -114,13 +114,13 @@ func (snake *Snake) ShortenTail(howMuch int) *SnakeNode {
 func (snake *Snake) Dead() {
 	sn := snake.ShortenTail(1)
 	if sn != nil {
-		snake.Events.AddFood(&Food{sn.X, sn.Y})
+		snake.Events.AddFood(&Food{sn.Row, sn.Col})
 		snake.Dead()
 	} else {
 		snake.Length = 0
-		snake.Events.RemoveNode(snake.Head.X, snake.Head.Y)
+		snake.Events.RemoveNode(snake.Head.Row, snake.Head.Col)
 		snake.Events.SnakeRemoved(snake)
-		snake.Events.AddFood(&Food{snake.Head.X, snake.Head.Y})
+		snake.Events.AddFood(&Food{snake.Head.Row, snake.Head.Col})
 		snake.Tail = nil
 		snake.Head = nil
 	}

@@ -55,8 +55,8 @@ func (m *Map) SpawnNewPlayer(player *Player) (int, int) {
 
 	m.SpawnFood(2)
 
-	m.SpawnNewPlayerAt(player, col, row)
-	return col, row
+	m.SpawnNewPlayerAt(player, row, col)
+	return row, col
 }
 
 func (m *Map) SpawnFood(num int) {
@@ -69,15 +69,15 @@ func (m *Map) SpawnFood(num int) {
 		col = rand.Intn(len(m.Tiles[0]))
 	}
 
-	m.AddFood(&Food{col, row})
+	m.AddFood(&Food{row, col})
 
 	if num-1 > 0 {
 		m.SpawnFood(num - 1)
 	}
 }
 
-func (m *Map) SpawnNewPlayerAt(player *Player, col int, row int) {
-	m.Players[player] = NewSnake(col, row, m, player)
+func (m *Map) SpawnNewPlayerAt(player *Player, row int, col int) {
+	m.Players[player] = NewSnake(row, col, m, player)
 	player.Snake = m.Players[player]
 }
 
@@ -86,8 +86,8 @@ func (m *Map) SnakeCreated(snake *Snake) {
 }
 
 func (m *Map) AddNode(snakeNode *SnakeNode) int {
-	col := snakeNode.X
-	row := snakeNode.Y
+	col := snakeNode.Col
+	row := snakeNode.Row
 
 	if row >= len(m.Tiles) || col >= len(m.Tiles[0]) {
 		return 2
@@ -107,13 +107,13 @@ func (m *Map) AddNode(snakeNode *SnakeNode) int {
 	return boolean.BtoI(m.Tiles[row][col].Food != nil)
 }
 
-func (m *Map) RemoveNode(col int, row int) {
+func (m *Map) RemoveNode(row int, col int) {
 	m.Tiles[row][col].Snake = nil
 }
 
 func (m *Map) AddFood(food *Food) {
-	col := food.X
-	row := food.Y
+	col := food.Col
+	row := food.Row
 
 	m.Tiles[row][col].Food = food
 }

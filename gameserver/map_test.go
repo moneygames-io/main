@@ -37,8 +37,8 @@ func TestNewMap(t *testing.T) {
 func TestPlayerSpawning(t *testing.T) {
 	m := NewMap(1)
 	p := &Player{0, false, nil, nil}
-	x, y := m.SpawnNewPlayer(p)
-	assert.NotNil(t, m.Tiles[y][x].Snake)
+	row, col := m.SpawnNewPlayer(p)
+	assert.NotNil(t, m.Tiles[row][col].Snake)
 
 	found := false
 	for r := range m.Tiles {
@@ -68,17 +68,17 @@ func TestPlayerSpawning(t *testing.T) {
 func TestPlayerMovement0ToEdge(t *testing.T) {
 	m := NewMap(1)
 	p := &Player{0, false, nil, nil}
-	x, y := m.SpawnNewPlayer(p)
+	row, col := m.SpawnNewPlayer(p)
 
 	p.CurrentDirection = 0
-	updatesLeft := len(m.Tiles) - y - 1
+	updatesLeft := len(m.Tiles) - row - 1
 
 	for i := 0; i < updatesLeft; i++ {
 		m.Update()
 	}
 
-	assert.Equal(t, x, p.Snake.Head.X, "Snake did not move in the right direction")
-	assert.Equal(t, y+updatesLeft, p.Snake.Head.Y, "Snake did not move in the right direction")
+	assert.Equal(t, col, p.Snake.Head.Col, "Snake did not move in the right direction")
+	assert.Equal(t, row+updatesLeft, p.Snake.Head.Row, "Snake did not move in the right direction")
 
 	m.Update()
 	assert.Equal(t, 0, p.Snake.Length)
@@ -89,17 +89,17 @@ func TestPlayerMovement0ToEdge(t *testing.T) {
 func TestPlayerMovement1ToEdge(t *testing.T) {
 	m := NewMap(1)
 	p := &Player{0, false, nil, nil}
-	x, y := m.SpawnNewPlayer(p)
+	row, col := m.SpawnNewPlayer(p)
 
 	p.CurrentDirection = 1
-	updatesLeft := len(m.Tiles[0]) - x - 1
+	updatesLeft := len(m.Tiles[0]) - col - 1
 
 	for i := 0; i < updatesLeft; i++ {
 		m.Update()
 	}
 
-	assert.Equal(t, x+updatesLeft, p.Snake.Head.X, "Snake did not move in the right direction")
-	assert.Equal(t, y, p.Snake.Head.Y, "Snake did not move in the right direction")
+	assert.Equal(t, col+updatesLeft, p.Snake.Head.Col, "Snake did not move in the right direction")
+	assert.Equal(t, row, p.Snake.Head.Row, "Snake did not move in the right direction")
 
 	m.Update()
 	assert.Equal(t, 0, p.Snake.Length)
@@ -110,17 +110,17 @@ func TestPlayerMovement1ToEdge(t *testing.T) {
 func TestPlayerMovement2ToEdge(t *testing.T) {
 	m := NewMap(1)
 	p := &Player{0, false, nil, nil}
-	x, y := m.SpawnNewPlayer(p)
+	row, col := m.SpawnNewPlayer(p)
 
 	p.CurrentDirection = 2
-	updatesLeft := y
+	updatesLeft := row
 
 	for i := 0; i < updatesLeft; i++ {
 		m.Update()
 	}
 
-	assert.Equal(t, x, p.Snake.Head.X, "Snake did not move in the right direction")
-	assert.Equal(t, 0, p.Snake.Head.Y, "Snake did not move in the right direction")
+	assert.Equal(t, col, p.Snake.Head.Col, "Snake did not move in the right direction")
+	assert.Equal(t, 0, p.Snake.Head.Row, "Snake did not move in the right direction")
 
 	m.Update()
 	assert.Equal(t, 0, p.Snake.Length)
@@ -131,17 +131,17 @@ func TestPlayerMovement2ToEdge(t *testing.T) {
 func TestPlayerMovement3ToEdge(t *testing.T) {
 	m := NewMap(1)
 	p := &Player{0, false, nil, nil}
-	x, y := m.SpawnNewPlayer(p)
+	row, col := m.SpawnNewPlayer(p)
 
 	p.CurrentDirection = 3
-	updatesLeft := x
+	updatesLeft := col
 
 	for i := 0; i < updatesLeft; i++ {
 		m.Update()
 	}
 
-	assert.Equal(t, 0, p.Snake.Head.X, "Snake did not move in the right direction")
-	assert.Equal(t, y, p.Snake.Head.Y, "Snake did not move in the right direction")
+	assert.Equal(t, 0, p.Snake.Head.Col, "Snake did not move in the right direction")
+	assert.Equal(t, row, p.Snake.Head.Row, "Snake did not move in the right direction")
 	m.Update()
 	assert.Equal(t, 0, p.Snake.Length)
 	assert.Nil(t, p.Snake.Head)
@@ -152,7 +152,7 @@ func TestFoodDynamics(t *testing.T) {
 	m := NewMap(1)
 	p := &Player{0, false, nil, nil}
 	m.SpawnNewPlayerAt(p, 3, 3)
-	m.AddFood(&Food{3, 5})
+	m.AddFood(&Food{5, 3})
 	m.AddFood(&Food{5, 5})
 	p.CurrentDirection = 0
 
@@ -192,9 +192,9 @@ func TestMultiPlayerDynamics(t *testing.T) {
 	p2 := &Player{0, false, nil, nil}
 	p3 := &Player{0, false, nil, nil}
 
-	m.SpawnNewPlayerAt(p1, 24, 21)
-	m.SpawnNewPlayerAt(p2, 25, 24)
-	m.SpawnNewPlayerAt(p3, 24, 28)
+	m.SpawnNewPlayerAt(p1, 21, 24)
+	m.SpawnNewPlayerAt(p2, 24, 25)
+	m.SpawnNewPlayerAt(p3, 28, 24)
 
 	m.AddFood(&Food{20, 20})
 	m.AddFood(&Food{20, 20})
