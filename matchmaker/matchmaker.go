@@ -27,7 +27,6 @@ func NewMatchmaker(target int) *Matchmaker {
 			DB:       0,
 		})
 		_, err := client.Ping().Result()
-
 		if err != nil {
 			fmt.Println("Matchmaker could not connect to redis")
 			fmt.Println(err)
@@ -36,9 +35,7 @@ func NewMatchmaker(target int) *Matchmaker {
 		}
 		time.Sleep(500 * time.Millisecond)
 	}
-
 	fmt.Println("Connected to redis")
-
 	return &Matchmaker{nil, nil, client, 0, target}
 }
 

@@ -1,7 +1,7 @@
 import Canvasobject from './canvasobject.js'
 
 export default class Gameserver extends Canvasobject {
-<<<<<<< HEAD
+
 	constructor(gs, fixDPI) {
 		super();
 		this.gs = gs;
@@ -82,91 +82,6 @@ export default class Gameserver extends Canvasobject {
 		}
 		this.sendKeyStatus()
 	}
-=======
-    constructor(gs, fixDPI) {
-        super();
-        this.gs = gs;
-        this.offset = 5;
-        this.controls = {
-            CurrentDirection: 0,
-            CurrentSprint: false,
-            CurrentZoomLevel: 1
-        };
-        window.addEventListener('keydown', this.handleKeyDown.bind(this), false);
-        window.addEventListener('keyup', this.handleKeyUp.bind(this), false);
-    }
-
-    connect() {
-        this.socket = new WebSocket(this.gs);
-        this.socket.onopen = this.socketOpened.bind(this);
-        this.socket.onmessage = this.mapReceived.bind(this);
-    }
-
-    socketOpened() {
-        this.socket.send(JSON.stringify({
-            'Name': 'Parth',
-            'Token': 'token'
-        }));
-    }
-
-    mapReceived(e) {
-        this.colors = JSON.parse(e.data);
-        window.requestAnimationFrame(this.render.bind(this));
-    }
-
-    toHexString(n) {
-        if (n < 0) {
-            n = 0xFFFFFFFF + n + 1;
-        }
-
-        return "#" + ("000000" + n.toString(16).toUpperCase()).substr(-6);
-    }
-
-    drawColors() {
-        let canvasWidth = super.getContext().canvas.width;
-        let canvasHeight = super.getContext().canvas.height;
-
-        let gameAreaSize = Math.min(canvasWidth, canvasHeight);
-
-        let gameAreaOffsetW = canvasWidth - gameAreaSize;
-        let gameAreaOffsetH = canvasHeight - gameAreaSize;
-
-        for (let r = 0; r < this.colors.length; r++) {
-            for (let c = 0; c < this.colors[r].length; c++) {
-                super.getContext().fillStyle = this.toHexString(this.colors[r][c]);
-                super.getContext().fillRect(
-                    (gameAreaSize / this.colors.length) * r + this.offset + (gameAreaOffsetW / 2),
-                    (gameAreaSize / this.colors[r].length) * c + this.offset + (gameAreaOffsetH / 2),
-                    (gameAreaSize / this.colors.length) - (2 * this.offset),
-                    (gameAreaSize / this.colors[r].length) - (2 * this.offset)
-                );
-            }
-        }
-    }
-
-    // TODO  are these right? Is the map oriented wrong? 
-    handleKeyDown(e) {
-        switch (e.key) {
-            case "ArrowUp":
-                this.controls.CurrentDirection = 3
-                break
-            case "ArrowRight":
-                this.controls.CurrentDirection = 0
-                break
-            case "ArrowDown":
-                this.controls.CurrentDirection = 1
-                break
-            case "ArrowLeft":
-                this.controls.CurrentDirection = 2
-                break
-            case " ":
-                this.controls.CurrentSprint = true
-                break
-        }
-
-        this.sendKeyStatus()
-    }
->>>>>>> b3586b65ec65e049c9f5a66e7b0b7a924972b490
 
     handleKeyUp(e) {
         if (e.key === " ") {
@@ -179,16 +94,8 @@ export default class Gameserver extends Canvasobject {
         this.socket.send(JSON.stringify(this.controls));
     }
 
-<<<<<<< HEAD
 	render() {
 		super.getContext().clearRect(0, 0, super.getContext().canvas.width, super.getContext().canvas.height);
 		this.drawColors();
 	}
 }
-=======
-    render() {
-        super.getContext().clearRect(0, 0, super.getContext().canvas.width, super.getContext().canvas.height);
-        this.drawColors();
-    }
-}
->>>>>>> b3586b65ec65e049c9f5a66e7b0b7a924972b490
