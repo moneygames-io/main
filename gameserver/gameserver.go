@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -17,17 +18,28 @@ type GameServer struct {
 	RedisClient *redis.Client
 	ID          string
 	GL          *gameLoop.GameLoop
+	PlayerCount int
 }
 
 var gameserver *GameServer
 
 func main() {
+	redisClient := connectToRedis()
+	id := os.Getenv("GSPORT")
+
+	playerCountString, _ := redisClient.Get(id).Result()
+	players := strconv.Atoi(playerCountString)
+
+	fmt.Println(players)
+
 	gameserver = &GameServer{
 		Users:       make(map[*Client]*Player),
 		World:       NewMap(2),
-		RedisClient: connectToRedis(),
-		ID:          os.Getenv("GSPORT"),
+		RedisClient: redisClient,
+		ID:          id,
+		PlayerCount: players,
 	}
+
 	gameserver.GL = gameLoop.New(2, gameserver.MapUpdater)
 
 	http.HandleFunc("/ws", wsHandler)
@@ -84,7 +96,7 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 	gs.Users[c] = c.Player
 	go c.collectInput(conn)
 
-	if len(gs.Users) > 1 && gs.GL.Running == false {
+	if len(gs.Users) >= gs.PlayerCount && gs.GL.Running == false {
 		gs.GL.Start()
 		fmt.Println("started")
 	}
@@ -99,7 +111,6 @@ func (gs *GameServer) PublishState(msg string) {
 	gs.RedisClient.Set(gs.ID, msg, 0)
 }
 
-// TODO Need a better game start detection and game end detection.
 func (gs *GameServer) MapUpdater(delta float64) {
 	gs.PublishState("game started")
 	gs.World.Update()
@@ -111,10 +122,14 @@ func (gs *GameServer) MapUpdater(delta float64) {
 	}
 	//fmt.Println(time.Now())
 
-	// TODO It's possible that the game ends before everyone joins
 	if len(gs.World.Players) == 1 {
-		// TODO Cleanup
+		gs.PostGame()
 		gs.PublishState("game finished")
 		os.Exit(0)
 	}
+}
+
+func (gs *GameServer) PostGame() {
+	// TODO token consumed
+	// TODO Money awarded
 }

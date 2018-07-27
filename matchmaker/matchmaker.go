@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -50,12 +51,18 @@ func (m *Matchmaker) getIdleGameserver() string {
 	for _, key := range keys {
 		status, _ := c.Get(key).Result()
 		if status == "idle" {
-			c.Set(key, "started", 0).Err() // TODO  Handle error
-			return key
+			err := c.Set(key, strconv.Itoa(m.CurrentClients), 0).Err()
+
+			if err != nil {
+				return key
+			} else {
+				fmt.Println("Could not find idle gameserver")
+				fmt.Println(err)
+			}
 		}
 	}
 
-	return "" // TODO  FATAL situation. I think if this happens it's one of the worst things possible.
+	return ""
 }
 
 func (m *Matchmaker) PlayerJoined(conn *websocket.Conn) {
