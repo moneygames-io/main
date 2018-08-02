@@ -50,7 +50,7 @@ func (m *Matchmaker) getIdleGameserver() string {
 		if status == "idle" {
 			err := c.Set(key, strconv.Itoa(m.CurrentClients), 0).Err()
 
-			if err != nil {
+			if err == nil {
 				return key
 			} else {
 				fmt.Println("Could not find idle gameserver")
