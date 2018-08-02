@@ -28,7 +28,7 @@ func main() {
 	id := os.Getenv("GSPORT")
 
 	playerCountString, _ := redisClient.Get(id).Result()
-	players := strconv.Atoi(playerCountString)
+	players, _ := strconv.Atoi(playerCountString)
 
 	fmt.Println(players)
 
