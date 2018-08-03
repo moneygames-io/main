@@ -9,7 +9,7 @@ export default class Gameserver extends Canvasobject {
         this.controls = {
             CurrentDirection: 0,
             CurrentSprint: false,
-            CurrentZoomLevel: 1
+            CurrentZoomLevel: 5
         };
         window.addEventListener('keydown', this.handleKeyDown.bind(this), false);
         window.addEventListener('keyup', this.handleKeyUp.bind(this), false);
