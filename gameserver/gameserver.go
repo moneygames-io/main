@@ -109,8 +109,6 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 	c := NewClient(message, conn)
 	c.Player = &Player{}
 	gs.World.SpawnNewPlayer(c.Player)
-	fmt.Println("from gs")
-	fmt.Println(c.Player.Snake)
 
 	gs.Users[c] = c.Player
 	go c.CollectInput(conn)
@@ -142,6 +140,7 @@ func (gs *GameServer) MapUpdater(delta float64) {
 			view = gs.World.Render()
 		} else {
 			view = client.GetView(gs.World)
+			fmt.Println(view)
 		}
 
 		go client.Conn.WriteJSON(&view)

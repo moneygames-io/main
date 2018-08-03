@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gorilla/websocket"
 )
 
@@ -24,7 +23,7 @@ func NewClient(r *RegisterMessage, conn *websocket.Conn) *Client {
 }
 
 func (c *Client) GetView(m *Map) [][]uint32 {
-	fmt.Println(c.Player.Snake)
+	c.CurrentZoomLevel = 7
 	head := c.Player.Snake.Head
 	r0 := head.Row - c.CurrentZoomLevel
 	c0 := head.Col - c.CurrentZoomLevel
@@ -37,7 +36,14 @@ func (c *Client) GetView(m *Map) [][]uint32 {
 
 	for row := 0; row < c.CurrentZoomLevel*2; row++ {
 		for col := 0; col < c.CurrentZoomLevel*2; col++ {
-			colors[row][col] = m.GetColor(&m.Tiles[row+r0][col+c0])
+			if row+r0 >= len(m.Tiles) ||
+				row+r0 < 0 ||
+				col+c0 >= len(m.Tiles[0]) ||
+				col+c0 < 0 {
+				colors[row][col] = 0xFFFFFF
+			} else {
+				colors[row][col] = m.GetColor(&m.Tiles[row+r0][col+c0])
+			}
 		}
 	}
 

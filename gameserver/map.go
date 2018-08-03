@@ -31,10 +31,10 @@ type MapEvent interface {
 
 func NewMap(players int) *Map {
 	newMap := &Map{}
-	newMap.Tiles = make([][]Tile, players*15)
+	newMap.Tiles = make([][]Tile, players*30)
 
 	for i := range newMap.Tiles {
-		newMap.Tiles[i] = make([]Tile, players*15)
+		newMap.Tiles[i] = make([]Tile, players*30)
 	}
 
 	newMap.Players = make(map[*Player]*Snake)
