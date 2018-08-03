@@ -53,7 +53,7 @@ func (m *Map) SpawnNewPlayer(player *Player) (int, int) {
 		col = rand.Intn(len(m.Tiles[0]))
 	}
 
-	m.SpawnFood(2)
+	m.SpawnFood(20)
 
 	m.SpawnNewPlayerAt(player, row, col)
 	return row, col

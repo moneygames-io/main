@@ -47,6 +47,11 @@ func (snake *Snake) Move(direction int) {
 }
 
 func (snake *Snake) Sprint(direction int) {
+	if snake.Length <= 4 {
+		snake.Move(direction)
+		return
+	}
+
 	if math.Abs(float64(direction-snake.CurrentDirection)) != 2 {
 		snake.CurrentDirection = direction
 	}
