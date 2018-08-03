@@ -27,8 +27,7 @@ func main() {
 	redisClient := connectToRedis()
 	id := os.Getenv("GSPORT")
 
-	playerCountString, _ := redisClient.Get(id).Result()
-	players, _ := strconv.Atoi(playerCountString)
+	players := 3
 
 	fmt.Println(players)
 
@@ -42,8 +41,25 @@ func main() {
 
 	gameserver.GL = gameLoop.New(2, gameserver.MapUpdater)
 
+	// TODO set status to ready
 	http.HandleFunc("/ws", wsHandler)
 	panic(http.ListenAndServe(":10000", nil))
+
+}
+
+func getPlayers(id string, redisClient *redis.Client) int {
+	for {
+		playerCountString, _ := redisClient.Get(id).Result()
+		players, _ := strconv.Atoi(playerCountString)
+		if players == 0 {
+			time.Sleep(1000 * time.Millisecond)
+			fmt.Println("No players yet")
+		} else {
+			return players
+		}
+	}
+
+	return 0
 }
 
 func connectToRedis() *redis.Client {
@@ -79,6 +95,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
+	fmt.Println("player joined")
 	message := &RegisterMessage{}
 
 	error := conn.ReadJSON(message)
@@ -92,10 +109,13 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 	c := NewClient(message, conn)
 	c.Player = &Player{}
 	gs.World.SpawnNewPlayer(c.Player)
+	fmt.Println("from gs")
+	fmt.Println(c.Player.Snake)
 
 	gs.Users[c] = c.Player
 	go c.CollectInput(conn)
 
+	fmt.Println(len(gs.Users), gs.PlayerCount)
 	if len(gs.Users) >= gs.PlayerCount && gs.GL.Running == false {
 		gs.GL.Start()
 		fmt.Println("started")
@@ -116,7 +136,14 @@ func (gs *GameServer) MapUpdater(delta float64) {
 	gs.World.Update()
 
 	for client := range gs.Users {
-		view := client.GetView(gs.World)
+		var view [][]uint32
+
+		if _, ok := gs.World.Losers[client.Player]; ok {
+			view = gs.World.Render()
+		} else {
+			view = client.GetView(gs.World)
+		}
+
 		go client.Conn.WriteJSON(&view)
 	}
 

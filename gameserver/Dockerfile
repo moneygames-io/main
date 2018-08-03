@@ -1,10 +1,16 @@
 FROM golang:1.8
 
 WORKDIR /go/src/app
-COPY . .
-EXPOSE 10000
+RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
-RUN go get -d -v ./...
+COPY Gopkg.toml .
+COPY Gopkg.lock .
+RUN dep ensure --vendor-only
+
+COPY . .
+RUN dep ensure
 RUN go install -v ./...
+
+EXPOSE 10000
 
 CMD ["app"]

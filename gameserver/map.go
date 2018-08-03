@@ -155,3 +155,19 @@ func (m *Map) GetColor(tile *Tile) uint32 {
 	m.Colors[tile.Snake] = rand.Uint32()
 	return m.Colors[tile.Snake]
 }
+
+func (m *Map) Render() [][]uint32 {
+	colors := make([][]uint32, len(m.Tiles))
+
+	for i := range m.Tiles {
+		colors[i] = make([]uint32, len(m.Tiles[i]))
+	}
+
+	for r := range m.Tiles {
+		for c := range m.Tiles[r] {
+			colors[r][c] = m.GetColor(&m.Tiles[r][c])
+		}
+	}
+
+	return colors
+}

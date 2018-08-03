@@ -51,6 +51,7 @@ func (m *Matchmaker) getIdleGameserver() string {
 			err := c.Set(key, strconv.Itoa(m.CurrentClients), 0).Err()
 
 			if err == nil {
+				// TODO before returning you need to check to make sure gameserver is on the same page
 				return key
 			} else {
 				fmt.Println("Could not find idle gameserver")
