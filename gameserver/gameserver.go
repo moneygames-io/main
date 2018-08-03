@@ -94,7 +94,7 @@ func (gs *GameServer) PlayerJoined(conn *websocket.Conn) {
 	gs.World.SpawnNewPlayer(c.Player)
 
 	gs.Users[c] = c.Player
-	go c.collectInput(conn)
+	go c.CollectInput(conn)
 
 	if len(gs.Users) >= gs.PlayerCount && gs.GL.Running == false {
 		gs.GL.Start()
@@ -114,13 +114,11 @@ func (gs *GameServer) PublishState(msg string) {
 func (gs *GameServer) MapUpdater(delta float64) {
 	gs.PublishState("game started")
 	gs.World.Update()
-	view := gs.World.Render()
 
-	for k := range gs.Users {
-		//TODO reduce size of this
-		go k.Conn.WriteJSON(&view)
+	for client := range gs.Users {
+		view := client.GetView(gs.World)
+		go client.Conn.WriteJSON(&view)
 	}
-	//fmt.Println(time.Now())
 
 	if len(gs.World.Players) == 1 {
 		gs.PostGame()
