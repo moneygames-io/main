@@ -23,7 +23,6 @@ func NewClient(r *RegisterMessage, conn *websocket.Conn) *Client {
 }
 
 func (c *Client) GetView(m *Map) [][]uint32 {
-	c.CurrentZoomLevel = 7
 	head := c.Player.Snake.Head
 	r0 := head.Row - c.CurrentZoomLevel
 	c0 := head.Col - c.CurrentZoomLevel
