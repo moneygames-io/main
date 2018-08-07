@@ -1,1 +1,0 @@
-docker build -t matchmaker . && docker tag matchmaker parthmehrotra/matchmaker && docker push parthmehrotra/matchmaker
