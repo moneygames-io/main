@@ -1,1 +1,0 @@
-docker build -t payserver . && docker tag payserver parthmehrotra/payserver && docker push parthmehrotra/payserver
