@@ -3,19 +3,16 @@ version: '3'
 services:
   frontend:
     image: parthmehrotra/frontend
-    build: frontend
     ports:
       - "9000:9000"
   matchmaker:
     depends_on:
       - redis
     image: parthmehrotra/matchmaker
-    build: matchmaker
     ports:
       - "8000:8000"
   gameserver-service:
     image: parthmehrotra/gameserver-service
-    build: gameserver-service
     depends_on:
       - redis
     volumes:
@@ -27,7 +24,6 @@ services:
     depends_on:
       - redis
     image: parthmehrotra/payserver
-    build: matchmaker
     ports:
       - "7000:7000"
   redis:
