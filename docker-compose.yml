@@ -2,17 +2,17 @@ version: '3'
 
 services:
   frontend:
-    image: parthmehrotra/frontend
+    image: moneygames/frontend
     ports:
       - "9000:9000"
   matchmaker:
     depends_on:
       - redis
-    image: parthmehrotra/matchmaker
+    image: moneygames/matchmaker
     ports:
       - "8000:8000"
   gameserver-service:
-    image: parthmehrotra/gameserver-service
+    image: moneygames/gameserver-service
     depends_on:
       - redis
     volumes:
@@ -23,7 +23,7 @@ services:
   payserver:
     depends_on:
       - redis
-    image: parthmehrotra/payserver
+    image: moneygames/payserver
     ports:
       - "7000:7000"
   redis:
