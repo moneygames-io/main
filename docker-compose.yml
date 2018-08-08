@@ -2,17 +2,17 @@ version: '3'
 
 services:
   frontend:
-    image: moneygames/frontend
+    image: moneygames/frontend:master
     ports:
       - "9000:9000"
   matchmaker:
     depends_on:
       - redis
-    image: moneygames/matchmaker
+    image: moneygames/matchmaker:master
     ports:
       - "8000:8000"
   gameserver-service:
-    image: moneygames/gameserver-service
+    image: moneygames/gameserver-service:master
     depends_on:
       - redis
     volumes:
@@ -23,7 +23,7 @@ services:
   payserver:
     depends_on:
       - redis
-    image: moneygames/payserver
+    image: moneygames/payserver:master
     ports:
       - "7000:7000"
   redis:
