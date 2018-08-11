@@ -7,29 +7,29 @@ services:
       - "9000:9000"
   matchmaker:
     depends_on:
-      - redis
+      - redis-gameservers
     image: moneygames/matchmaker:master
     ports:
       - "8000:8000"
   gameserver-service:
     image: moneygames/gameserver-service:master
     depends_on:
-      - redis
+      - redis-gameservers
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     deploy:
       placement:
         constraints: [ node.role == manager ]
   payserver:
-    depends_on:
-      - redis
     image: moneygames/payserver:master
+    depends_on:
+      - redis-players
     ports:
       - "7000:7000"
-  redis:
+  redis-players:
     image: redis
-    ports:
-      - "6379:6379"
+  redis-gameservers:
+    image: redis
   vis:
     image: dockersamples/visualizer
     volumes:
@@ -39,3 +39,4 @@ services:
     deploy:
       placement:
         constraints: [ node.role == manager ]
+
