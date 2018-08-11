@@ -2,7 +2,7 @@ version: '3'
 
 services:
   frontend:
-    image: moneygames/frontend:bow
+    image: moneygames/frontend:master
     ports:
       - "9000:9000"
   matchmaker:
@@ -21,7 +21,7 @@ services:
       placement:
         constraints: [ node.role == manager ]
   payserver:
-    image: moneygames/payserver:payserver
+    image: moneygames/payserver:master
     depends_on:
       - redis-players
     ports:
