@@ -13,6 +13,8 @@ services:
       - "8000:8000"
   gameserver-service:
     image: moneygames/gameserver-service:master
+    environment:
+      - GSTAG=master
     depends_on:
       - redis-gameservers
     volumes:
