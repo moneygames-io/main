@@ -5,6 +5,10 @@ services:
     image: moneygames/frontend:master
     ports:
       - "9000:9000"
+  serverlist:
+    image: moneygames/serverlist:master
+    ports:
+      - "6001:6001"
   matchmaker:
     depends_on:
       - redis-gameservers
@@ -32,6 +36,8 @@ services:
     image: redis
   redis-gameservers:
     image: redis
+    ports:
+      - "6379:6379"
   vis:
     image: dockersamples/visualizer
     volumes:
