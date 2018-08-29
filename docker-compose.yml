@@ -2,7 +2,7 @@ version: '3'
 
 services:
   frontend:
-    image: moneygames/frontend:master
+    image: moneygames/frontend:minimap
     ports:
       - "9000:9000"
   serverlist:
@@ -18,7 +18,7 @@ services:
   gameserver-service:
     image: moneygames/gameserver-service:master
     environment:
-      - GSTAG=master
+      - GSTAG=minimap
     depends_on:
       - redis-gameservers
     volumes:
@@ -27,7 +27,7 @@ services:
       placement:
         constraints: [ node.role == manager ]
   payserver:
-    image: moneygames/payserver:master
+    image: moneygames/payserver:minimap
     depends_on:
       - redis-players
     ports:
