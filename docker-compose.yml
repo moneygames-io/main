@@ -1,10 +1,10 @@
 version: '3'
 
 services:
-  frontend:
-    image: moneygames/frontend:minimap
-    ports:
-      - "9000:9000"
+   frontend:
+     image: moneygames/frontend:master
+     ports:
+       - "9000:9000"
   serverlist:
     image: moneygames/serverlist:master
     ports:
@@ -18,7 +18,7 @@ services:
   gameserver-service:
     image: moneygames/gameserver-service:master
     environment:
-      - GSTAG=minimap
+      - GSTAG=master
     depends_on:
       - redis-gameservers
     volumes:
