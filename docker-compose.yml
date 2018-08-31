@@ -27,7 +27,7 @@ services:
       placement:
         constraints: [ node.role == manager ]
   payserver:
-    image: moneygames/payserver:master
+    image: moneygames/payserver:minimap
     depends_on:
       - redis-players
     ports:
@@ -36,6 +36,8 @@ services:
     image: redis
   redis-gameservers:
     image: redis
+    ports:
+      - "6379:6379"
   vis:
     image: dockersamples/visualizer
     volumes:
@@ -45,4 +47,3 @@ services:
     deploy:
       placement:
         constraints: [ node.role == manager ]
-
