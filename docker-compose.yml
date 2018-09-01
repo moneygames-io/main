@@ -36,8 +36,6 @@ services:
     image: redis
   redis-gameservers:
     image: redis
-    ports:
-      - "6379:6379"
   vis:
     image: dockersamples/visualizer
     volumes:
