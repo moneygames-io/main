@@ -1,12 +1,12 @@
 version: '3'
 
 services:
-  frontend:
-    image: moneygames/frontend:master
-    ports:
-      - "9000:9000"
+  # frontend:
+  #   image: moneygames/frontend:master
+  #   ports:
+  #     - "9000:9000"
   serverlist:
-    image: moneygames/serverlist:master
+    image: moneygames/serverlist:spectating
     ports:
       - "6001:6001"
   matchmaker:
