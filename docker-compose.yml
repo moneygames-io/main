@@ -9,6 +9,10 @@ services:
     image: moneygames/serverlist:master
     ports:
       - "6001:6001"
+  playerstatus:
+    image: moneygames/playerstatus:master
+    ports:
+      - "6002:6002"
   matchmaker:
     depends_on:
       - redis-gameservers
