@@ -9,6 +9,10 @@ services:
     image: moneygames/serverlist:spectating
     ports:
       - "6001:6001"
+  playerstatus:
+    image: moneygames/playerstatus:master
+    ports:
+      - "6002:6002"
   matchmaker:
     depends_on:
       - redis-gameservers
@@ -36,8 +40,6 @@ services:
     image: redis
   redis-gameservers:
     image: redis
-    ports:
-      - "6379:6379"
   vis:
     image: dockersamples/visualizer
     volumes:
