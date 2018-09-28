@@ -22,7 +22,7 @@ services:
   gameserver-service:
     image: moneygames/gameserver-service:master
     environment:
-      - GSTAG=master
+      - GSTAG=alpha
     depends_on:
       - redis-gameservers
     volumes:
