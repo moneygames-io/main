@@ -22,7 +22,7 @@ services:
   gameserver-service:
     image: moneygames/gameserver-service:master
     environment:
-      - GSTAG=master
+      - GSTAG=shorten-bug
     depends_on:
       - redis-gameservers
     volumes:
@@ -31,15 +31,19 @@ services:
       placement:
         constraints: [ node.role == manager ]
   payserver:
-    image: moneygames/payserver:minimap
+    image: moneygames/dummy-payserver:master
     depends_on:
       - redis-players
     ports:
       - "7000:7000"
   redis-players:
     image: redis
+    ports:
+      - "9001:6379"
   redis-gameservers:
     image: redis
+    ports:
+      - "9002:6379"
   vis:
     image: dockersamples/visualizer
     volumes:
