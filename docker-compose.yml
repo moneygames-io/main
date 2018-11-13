@@ -2,7 +2,7 @@ version: '3'
 
 services:
   frontend:
-    image: moneygames/frontend:master
+    image: moneygames/frontend:bow-calculate-pot
     ports:
       - "9000:9000"
   serverlist:
@@ -16,13 +16,13 @@ services:
   matchmaker:
     depends_on:
       - redis-gameservers
-    image: moneygames/matchmaker:master
+    image: moneygames/matchmaker:bow-calculate-pot
     ports:
       - "8000:8000"
   gameserver-service:
     image: moneygames/gameserver-service:master
     environment:
-      - GSTAG=alpha
+      - GSTAG=bow-calculate-pot
     depends_on:
       - redis-gameservers
     volumes:
@@ -31,9 +31,10 @@ services:
       placement:
         constraints: [ node.role == manager ]
   payserver:
-    image: moneygames/dummy-payserver:master
+    image: moneygames/payserver:bow-send-payments
     depends_on:
       - redis-players
+      - redis-gameservers
     ports:
       - "7000:7000"
   redis-players:
