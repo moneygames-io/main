@@ -2,7 +2,7 @@ version: '3'
 
 services:
   frontend:
-    image: moneygames/frontend:bow-calculate-pot
+    image: moneygames/frontend:master
     ports:
       - "9000:9000"
   serverlist:
@@ -16,7 +16,7 @@ services:
   matchmaker:
     depends_on:
       - redis-gameservers
-    image: moneygames/matchmaker:bow-calculate-pot
+    image: moneygames/matchmaker:master
     ports:
       - "8000:8000"
   gameserver-service:
@@ -31,7 +31,7 @@ services:
       placement:
         constraints: [ node.role == manager ]
   payserver:
-    image: moneygames/payserver:bow-send-payments
+    image: moneygames/payserver:master
     depends_on:
       - redis-players
       - redis-gameservers
