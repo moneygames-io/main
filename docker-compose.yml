@@ -22,7 +22,7 @@ services:
   gameserver-service:
     image: moneygames/gameserver-service:master
     environment:
-      - GSTAG=alpha
+      - GSTAG=bow-calculate-pot
     depends_on:
       - redis-gameservers
     volumes:
@@ -31,9 +31,10 @@ services:
       placement:
         constraints: [ node.role == manager ]
   payserver:
-    image: moneygames/dummy-payserver:master
+    image: moneygames/payserver:master
     depends_on:
       - redis-players
+      - redis-gameservers
     ports:
       - "7000:7000"
   redis-players:
