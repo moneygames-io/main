@@ -1,24 +1,24 @@
 [submodule "microservices/frontend"]
 	path = microservices/frontend
-	url = git@git.moneygames.io:sneks/frontend.git
+	url = https://git.moneygames.io/sneks/frontend.git
 	branch = "master"
 [submodule "microservices/gameserver-service"]
 	path = microservices/gameserver-service
-	url = git@git.moneygames.io:sneks/gameserver-service.git
+	url = https://git.moneygames.io/sneks/gameserver-service.git
 	branch = "master"
 [submodule "microservices/playerstatus"]
 	path = microservices/playerstatus
-	url = git@git.moneygames.io:sneks/playerstatus.git
+	url = https://git.moneygames.io/sneks/playerstatus.git
 	branch = "master"
 [submodule "microservices/serverlist"]
 	path = microservices/serverlist
-	url = git@git.moneygames.io:sneks/serverlist.git
+	url = https://git.moneygames.io/sneks/serverlist.git
 	branch = "master"
 [submodule "microservices/payserver"]
 	path = microservices/payserver
-	url = git@git.moneygames.io:sneks/payserver.git
+	url = https://git.moneygames.io/sneks/payserver.git
 	branch = "master"
 [submodule "microservices/matchmaker"]
 	path = microservices/matchmaker
-	url = git@git.moneygames.io:sneks/matchmaker.git
+	url = https://git.moneygames.io/sneks/matchmaker.git
 	branch = "master"
