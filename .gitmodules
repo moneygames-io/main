@@ -22,7 +22,3 @@
 	path = microservices/matchmaker
 	url = https://git.moneygames.io/sneks/matchmaker.git
 	branch = "master"
-[submodule "microservices/gameserver"]
-	path = microservices/gameserver
-	url = https://git.moneygames.io/sneks/gameserver
-	branch = master
