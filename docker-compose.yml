@@ -31,7 +31,7 @@ services:
       placement:
         constraints: [ node.role == manager ]
   payserver:
-    image: moneygames/payserver:master
+    image: moneygames/payserver:bow-fix
     environment:
       - PSTAG=testnet
     depends_on:
