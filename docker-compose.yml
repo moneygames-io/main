@@ -32,7 +32,9 @@ services:
         constraints: [ node.role == manager ]
   payserver:
     image: moneygames/payserver:master
-    depends_on:
+    environmnet:
+	  - PSTAG=testnet
+	depends_on:
       - redis-players
       - redis-gameservers
     ports:
