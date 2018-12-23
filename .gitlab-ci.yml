@@ -9,5 +9,7 @@ before_script:
     
 deploy:
   stage: deploy
+  only:
+    - master
   script:
-    - ssh root@142.93.11.143 'cd main && git pull origin master && ./restart'
+    - ssh root@142.93.11.143 'cd main && git pull origin master && cat docker-compose.yml && ./restart'
