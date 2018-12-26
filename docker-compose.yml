@@ -33,7 +33,7 @@ services:
   payserver:
     image: moneygames/payserver:bow-fix
     environment:
-      - PSTAG=testnet
+      - PSTAG=free
     depends_on:
       - redis-players
       - redis-gameservers
