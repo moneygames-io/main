@@ -17,6 +17,9 @@ services:
     depends_on:
       - redis-gameservers
     image: moneygames/matchmaker:master
+    environment:
+      - MM_TIMER_SECONDS=1
+      - MM_MIN_PLAYERS=2
     ports:
       - "8000:8000"
   gameserver-service:
@@ -41,8 +44,12 @@ services:
       - "7000:7000"
   redis-players:
     image: redis
+    ports:
+      - "6380:6379"
   redis-gameservers:
     image: redis
+    ports:
+      - "6379:6379"
   vis:
     image: dockersamples/visualizer
     volumes:
