@@ -17,15 +17,12 @@ services:
     depends_on:
       - redis-gameservers
     image: moneygames/matchmaker:master
-    environment:
-      - MM_TIMER_SECONDS=1
-      - MM_MIN_PLAYERS=2
     ports:
       - "8000:8000"
   gameserver-service:
     image: moneygames/gameserver-service:master
     environment:
-      - GSTAG=master
+      - GSTAG=mast
     depends_on:
       - redis-gameservers
     volumes:
@@ -34,18 +31,35 @@ services:
       placement:
         constraints: [ node.role == manager ]
   payserver:
-    image: moneygames/payserver:bow-fix
+    image: moneygames/payserver:master
     environment:
-      - PSTAG=free
+      - NET=testnet
+      - APIKEY=hunterkey
+      - SSL=false
     depends_on:
       - redis-players
       - redis-gameservers
     ports:
       - "7000:7000"
+  receipt:
+    image: moneygames/receipt:master
+    environment:
+      - NET=testnet
+      - APIKEY=hunterkey
+      - SSL=false
+    depends_on:
+      - redis-players
+      - redis-gameservers
+    ports:
+      - "7002:7002"
   redis-players:
     image: redis
+    ports:
+      - "9001:6379"
   redis-gameservers:
     image: redis
+    ports:
+      - "9002:6379"
   vis:
     image: dockersamples/visualizer
     volumes:
