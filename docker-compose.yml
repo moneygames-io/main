@@ -17,12 +17,16 @@ services:
     depends_on:
       - redis-gameservers
     image: moneygames/matchmaker:master
+    environment:
+      - MM_TIMER_SECONDS=5
+      - MM_MIN_PLAYERS=2
+      - SSL=false
     ports:
       - "8000:8000"
   gameserver-service:
     image: moneygames/gameserver-service:master
     environment:
-      - GSTAG=mast
+      - GSTAG=master
     depends_on:
       - redis-gameservers
     volumes:
@@ -33,7 +37,7 @@ services:
   payserver:
     image: moneygames/payserver:master
     environment:
-      - NET=testnet
+      - NET=free
       - APIKEY=hunterkey
       - SSL=false
     depends_on:
