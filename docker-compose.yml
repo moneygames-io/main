@@ -37,7 +37,8 @@ services:
   payserver:
     image: moneygames/payserver:master
     environment:
-      - NET=free
+      - NET=testnet
+      - BCOIN=testnet.moneygames.io
       - APIKEY=hunterkey
       - SSL=false
     depends_on:
@@ -49,6 +50,7 @@ services:
     image: moneygames/receipt:master
     environment:
       - NET=testnet
+      - BCOIN=testnet.moneygames.io
       - APIKEY=hunterkey
       - SSL=false
     depends_on:
