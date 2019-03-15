@@ -37,10 +37,11 @@ services:
   payserver:
     image: moneygames/payserver:master
     environment:
-      - NET=testnet
+      - NET=main
       - BCOIN=testnet.moneygames.io
-      - APIKEY=hunterkey
-      - SSL=false
+      - APIKEY=f0c5d427ff4a53701ada1117e4face2a0f7ec8e39d775f9764307ddf67b1ab53
+      - SSL=true
+      - NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/bcoin-test.crt
     depends_on:
       - redis-players
       - redis-gameservers
@@ -49,10 +50,11 @@ services:
   receipt:
     image: moneygames/receipt:master
     environment:
-      - NET=testnet
+      - NET=main
       - BCOIN=testnet.moneygames.io
-      - APIKEY=hunterkey
-      - SSL=false
+      - APIKEY=f0c5d427ff4a53701ada1117e4face2a0f7ec8e39d775f9764307ddf67b1ab53
+      - SSL=true
+      - NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/bcoin-test.crt
     depends_on:
       - redis-players
       - redis-gameservers
